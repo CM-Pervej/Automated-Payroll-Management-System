@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: ../index.php');
+// Check if the user is logged in and has the HR role
+if (!isset($_SESSION['user_id']) || ($_SESSION['userrole_id'] != 1 && $_SESSION['userrole_id'] != 2)) {
+    header('Location: ../dashboard.php'); // Redirect to dashboard if not HR or Admin
     exit();
 }
 
@@ -109,7 +109,7 @@ if ($result) {
                                     <!-- Multiple Buttons with Different Links -->
                                     <div class="space-x-4">
                                         <!-- Buttons: All use the same function, but pass different URLs -->
-                                        <button class="p-3 bg-blue-500 text-white rounded-md" onclick="generateReport('dept.php')">Generate Year Report</button>
+                                        <button class="p-3 bg-blue-500 text-white rounded-md" onclick="generateReport('empYear.php')">Employee</button>
                                         <button class="p-3 bg-green-500 text-white rounded-md" onclick="generateReport('monthly_report.php')">Generate Monthly Report</button>
                                         <button class="p-3 bg-yellow-500 text-white rounded-md" onclick="generateReport('custom_report.php')">Generate Custom Report</button>
                                     </div>
@@ -165,7 +165,7 @@ if ($result) {
             const month = monthFilter.value;
             const year = yearFilter.value;
 
-            // Update the URLs for the reports dynamically
+            // Update the URLs for the reports dynamically dept
             const monthlyEmployeeUrl = month && year ? `empReport.php?month=${month}&year=${year}` : '#';
             const monthlyDepartmentUrl = month && year ? `deptReport.php?month=${month}&year=${year}` : '#';
             const monthlyDepartmentUrl2 = month && year ? `deptReport2.php?month=${month}&year=${year}` : '#';

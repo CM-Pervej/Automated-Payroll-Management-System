@@ -9,8 +9,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Check if the user exists in the database
-    $query = "SELECT * FROM user WHERE email = ?";
+    // Check if the user exists and has approval
+    $query = "SELECT user.*, employee.approve 
+              FROM user 
+              JOIN employee ON user.employee_id = employee.id 
+              WHERE user.email = ?";
+              
     if ($stmt = $conn->prepare($query)) {
         $stmt->bind_param('s', $email);
         $stmt->execute();
@@ -18,18 +22,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
-            // Verify the password
-            if (password_verify($password, $user['password'])) {
+
+            if ($user['approve'] == 0) {
+                echo "<script>alert('Your account is not approved yet or dismissed.'); window.location.href='index.php';</script>";
+                exit();
+            } elseif (password_verify($password, $user['password'])) {
                 // Store user ID in session
                 $_SESSION['user_id'] = $user['id'];
+                $_SESSION['userrole_id'] = $user['userrole_id'];
                 // Redirect to dashboard.php
                 header('Location: dashboard.php');
                 exit();
             } else {
-                $error = "Invalid password";
+                echo "<script>alert('Invalid password.'); window.location.href='index.php';</script>";
+                exit();
             }
         } else {
-            $error = "User not found";
+            echo "<script>alert('User not found.'); window.location.href='index.php';</script>";
+            exit();
         }
 
         $stmt->close();

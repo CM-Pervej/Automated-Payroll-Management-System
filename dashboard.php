@@ -3,17 +3,21 @@ session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    // Redirect to the login page if not authenticated
     header('Location: index.php');
+    exit();
+}
+
+if (!isset($_SESSION['userrole_id'])) {
+    header('Location: index.php');  // Or handle the error as needed
     exit();
 }
 
 // Include the database connection
 include('db_conn.php');
 
-// Fetch user details
+// // Fetch user details
 // $user_id = $_SESSION['user_id'];
-// $query = "SELECT name, employeeNo, email FROM user WHERE id = ?";
+// $query = "SELECT name, employeeNo, email, userrole_id FROM user WHERE id = ?";
 // if ($stmt = $conn->prepare($query)) {
 //     $stmt->bind_param('i', $user_id);
 //     $stmt->execute();
@@ -26,6 +30,9 @@ include('db_conn.php');
 //     }
 //     $stmt->close();
 // }
+
+// // Get the user role
+$userrole_id = $_SESSION['userrole_id'];
 ?>
 
 <!DOCTYPE html>
@@ -48,11 +55,11 @@ include('db_conn.php');
     <!-- Main Content Area -->
     <div class="flex flex-col flex-grow ml-64">
         <!-- Top Bar (fixed) -->
-         <div class="w-full">
+        <div class="w-full">
             <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
                 <?php include 'topBar.php'; ?>
             </aside>
-         </div>
+        </div>
 
         <!-- Content Section -->
         <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">
@@ -81,11 +88,26 @@ include('db_conn.php');
                 </div>
             </div>
 
+            <!-- Links to different pages (Visible to all but disabled based on role) -->
+            <div class="flex gap-4 mb-8">
+                <a href="users/admin.php" class="btn btn-primary" <?php echo ($userrole_id != 1) ? 'disabled' : ''; ?> title="Only Admin can access this page">
+                    Admin Page
+                </a>
+                <a href="users/hr.php" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2) ? 'disabled' : ''; ?> title="Only Admin or HR can access this page">
+                    HR Page
+                </a>
+                <a href="users/user1.php" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'disabled' : ''; ?> title="Only User1 can access this page">
+                    User 1 Page
+                </a>
+                <a href="users/user2.php" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'disabled' : ''; ?> title="Only User2 can access this page">
+                    User 2 Page
+                </a>
+            </div>
+
             <!-- Additional Dashboard Content -->
             <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
                 <h2 class="text-2xl font-bold mb-4">Dashboard Insights</h2>
                 <p class="text-gray-700">View comprehensive insights on payroll activities, employee statistics, and review records.</p>
-                <!-- Add more detailed sections as needed --> 
             </div>
         </main>
     </div>

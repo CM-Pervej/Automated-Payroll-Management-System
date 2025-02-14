@@ -1,13 +1,5 @@
 <?php
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: index.php');
-    exit();
-}
-
-// Include the database connection
+include 'view.php'; 
 include 'db_conn.php';
 
 // Fetch payroll records for the current month and year
@@ -193,7 +185,7 @@ if ($result) {
                 </select>
                 <!-- <button class="btn btn-primary"><a href="report/link.php"></a></button> -->
                 <!-- <button onclick="window.location.href='report/link.php';">Download</button> -->
-                <button class="btn btn-primary" onclick="window.open('report/link.php', '_blank');">Download</button>
+                <button class="btn btn-primary" onclick="window.open('report/link.php', '_blank');" <?php echo ($userrole_id != 1 && $userrole_id != 2) ? 'disabled' : ''; ?> title="Only Admin and HR can access this page">Download</button>
 
             </div>
 

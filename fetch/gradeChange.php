@@ -1,14 +1,5 @@
 <?php
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    // Redirect to the login page if not authenticated
-    header('Location: ../index.php');
-    exit();
-}
-
-// Include the database connection
+include 'auth.php';
 include '../db_conn.php';
 
 // Initialize an array to hold the grades

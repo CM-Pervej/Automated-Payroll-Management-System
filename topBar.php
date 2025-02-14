@@ -1,3 +1,42 @@
+<?php
+// Check if session is not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+include('db_conn.php');
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
+
+// Fetch user details
+$user_id = $_SESSION['user_id'];
+$query = "SELECT user.name, user.userrole_id FROM user WHERE user.id = ?";
+
+if ($stmt = $conn->prepare($query)) {
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    $stmt->close();
+}
+
+// Determine profile page
+$profile_page = "#";
+if ($user['userrole_id'] == 1) {
+    $profile_page = "users/admin.php";
+} elseif ($user['userrole_id'] == 2) {
+    $profile_page = "users/hr.php";
+} elseif ($user['userrole_id'] == 3 || $user['userrole_id'] == 4) {
+    $profile_page = "user.php";
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +65,7 @@
 </head>
 <body>
     <!-- Top Bar -->
-    <header class="p-4 text-white bg-blue-50">
+    <header class="p-2 text-white bg-blue-50">
         <div class="container mx-auto flex items-center justify-between">
             <!-- Search Bar with Clear Icon -->
             <div class="relative w-80">
@@ -40,12 +79,11 @@
 
             <!-- User Profile Dropdown -->
             <div class="relative">
-                <button id="profileMenuButton" class="flex items-center space-x-2 focus:outline-none">
-                    <img src="profile.png" alt="User" class="w-8 h-8 rounded-full">
-                    <span class="text-black">User</span>
+                <button id="profileMenuButton" class="flex items-center space-x-2 focus:outline-none py-3 px-6 rounded-full shadow-inner bg-blue-300">
+                    <span class="text-black font-semibold"><?php echo htmlspecialchars($user['name']); ?></span>
                 </button>
-                <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 text-gray-800 z-20"> <!-- Added z-20 -->
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-200">Profile</a>
+                <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 text-gray-800 z-20">
+                    <a href="<?php echo $profile_page; ?>" class="block px-4 py-2 hover:bg-gray-200">Profile</a>
                     <a href="#" class="block px-4 py-2 hover:bg-gray-200">Settings</a>
                     <a href="logout.php" class="block px-4 py-2 text-red-600 hover:bg-gray-200">Logout</a>
                 </div>

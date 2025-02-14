@@ -1,14 +1,5 @@
 <?php 
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    // Redirect to the login page if not authenticated
-    header('Location: index.php');
-    exit();
-}
-
-// Include the database connection
+include 'view.php'; 
 include 'db_conn.php';
 $employees = [];
 
@@ -19,6 +10,7 @@ $result = $conn->query("SELECT e.id, e.employeeNo, e.name, e.empStatus, e.grade_
     LEFT JOIN designations des ON e.designation_id = des.id
     LEFT JOIN grade g ON e.grade_id = g.id 
     INNER JOIN checkEmployee ce ON e.id = ce.employee_id
+    WHERE e.approve != 0
 ");
 
 if ($result) {
@@ -98,10 +90,10 @@ $conn->close();
         <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">
             <div>
                 <form method="POST" action="">
-                    <section class="flex justify-between mb-5">
+                    <section class="flex justify-between items-center mb-5">
                         <h1 class="text-2xl font-bold mb-4">Employee List</h1>
-                        <div class="mt-4">
-                            <button type="submit" name="delete_all" class="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700">Delete Selected</button>
+                        <div class="">
+                            <button type="submit" name="delete_all" class="btn btn-error text-white py-2 px-4 rounded hover:bg-red-700" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'disabled' : ''; ?> title="Only Admin and HR can access this page">Delete Selected</button>
                         </div>
                     </section>
                     <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg">
@@ -161,7 +153,7 @@ $conn->close();
                                         <td class="px-4 py-2"><?php echo htmlspecialchars($employee['empStatus']); ?></td>
                                         <td class="px-4 py-2">
                                             <!-- Delete Button -->
-                                            <a href="?delete_id=<?php echo $employee['id']; ?>" class="text-red-600 hover:underline">Delete</a>
+                                            <a href="?delete_id=<?php echo $employee['id']; ?>" class="text-red-600 hover:underline" style="<?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'pointer-events: none; color: gray; text-decoration: none;' : ''; ?>" title="Only Admin and HR can access this page">Delete</a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

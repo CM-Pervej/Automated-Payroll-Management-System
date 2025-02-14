@@ -1,15 +1,6 @@
 <?php
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    // Redirect to the login page if not authenticated
-    header('Location: index.php');
-    exit();
-}
-
-// Include the database connection
-include 'db_conn.php';
+include 'auth.php';
+include '../db_conn.php';
 
 $employee_id = $_GET['employee_id'] ?? null;
 $employee = null;
@@ -175,9 +166,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <select name="empStatus" id="empStatus" required 
                                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
                             <option value="Active" <?php echo ($employee['empStatus'] == 'Active') ? 'selected' : ''; ?>>Active</option>
-                            <option value="On Leave" <?php echo ($employee['empStatus'] == 'On Leave') ? 'selected' : ''; ?>>On Leave</option>
+                            <option value="In Active" <?php echo ($employee['empStatus'] == 'In Active') ? 'selected' : ''; ?>>In Active</option>
+                            <!-- <option value="On Leave" <?php echo ($employee['empStatus'] == 'On Leave') ? 'selected' : ''; ?>>On Leave</option>
                             <option value="Terminated" <?php echo ($employee['empStatus'] == 'Terminated') ? 'selected' : ''; ?>>Terminated</option>
-                            <option value="Retired" <?php echo ($employee['empStatus'] == 'Retired') ? 'selected' : ''; ?>>Retired</option>
+                            <option value="Retired" <?php echo ($employee['empStatus'] == 'Retired') ? 'selected' : ''; ?>>Retired</option> -->
                         </select>
                     </div>
                     <div>

@@ -1,13 +1,5 @@
 <?php
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    // Redirect to the login page if not authenticated
-    header('Location: ../index.php');
-    exit();
-}
-
+include '../view.php';
 include '../db_conn.php';
 
 // Fetch all grades
@@ -91,10 +83,10 @@ $conn->close();
                 <section class="flex justify-between mb-5">
                     <h1 class="text-2xl font-bold mb-4">Grade List</h1>
                     <div class="flex justify-end gap-5">
-                        <button id="addGradeButton" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center">
+                        <button id="addGradeButton" class="btn btn-success text-white px-4 py-2 rounded hover:bg-green-700 flex items-center" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'disabled' : ''; ?> title="Only Admin and HR can access this page">
                             <i class="fas fa-plus mr-2"></i> Add Grade
                         </button>
-                        <a href="gradeChange.php" class="btn btn-info">Action</a>
+                        <a href="gradeChange.php" class="btn btn-info" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'disabled' : ''; ?> title="Only Admin and HR can access this page">Action</a>
                     </div>
                 </section>
 

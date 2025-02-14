@@ -1,14 +1,5 @@
 <?php 
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    // Redirect to the login page if not authenticated
-    header('Location: index.php');
-    exit();
-}
-
-// Include the database connection
+include 'view.php'; 
 include 'db_conn.php';
 $employees = [];
 
@@ -19,7 +10,7 @@ $result = $conn->query("SELECT e.id, e.employeeNo, e.name, e.empStatus, e.grade_
     LEFT JOIN designations des ON e.designation_id = des.id
     LEFT JOIN grade g ON e.grade_id = g.id 
     LEFT JOIN checkEmployee ce ON e.id = ce.employee_id
-    WHERE ce.employee_id IS NULL
+    WHERE ce.employee_id IS NULL AND e.approve != 0
 ");
 
 if ($result) {

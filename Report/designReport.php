@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+// Check if the user is logged in and has the HR role
+if (!isset($_SESSION['user_id']) || ($_SESSION['userrole_id'] != 1 && $_SESSION['userrole_id'] != 2)) {
+    header('Location: ../dashboard.php'); // Redirect to dashboard if not HR or Admin
+    exit();
+}
+
 // Include the database connection
 include '../db_conn.php';
 

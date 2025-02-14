@@ -3,7 +3,9 @@ CREATE TABLE `user` (
     employee_id INT NOT NULL UNIQUE,
     employeeNo VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
+    userrole_id INT NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE, 
     password VARCHAR(255) NOT NULL,
-    FOREIGN KEY (employee_id) REFERENCES employee(id)
+    FOREIGN KEY (employee_id) REFERENCES employee(id),
+    FOREIGN KEY (userrole_id) REFERENCES userrole(id)
 );

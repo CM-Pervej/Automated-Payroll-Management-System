@@ -1,12 +1,5 @@
 <?php
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: ../index.php');
-    exit();
-}
-
+include 'auth.php';
 include '../db_conn.php';
 
 $employee_id = isset($_GET['employee_id']) ? (int)$_GET['employee_id'] : 0;

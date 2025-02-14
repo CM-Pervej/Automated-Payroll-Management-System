@@ -1,15 +1,6 @@
 <?php 
-session_start();
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    // Redirect to the login page if not authenticated
-    header('Location: index.php');
-    exit();
-}
-
-// Include the database connection
+include 'view.php'; 
 include 'db_conn.php';
-
 $employees = [];
 
 // Fetch employee data along with department name and designation
@@ -18,6 +9,7 @@ $result = $conn->query("SELECT e.id, e.employeeNo, e.name, e.empStatus, e.grade_
     LEFT JOIN departments d ON e.department_id = d.id
     LEFT JOIN designations des ON e.designation_id = des.id
     LEFT JOIN grade g ON e.grade_id = g.id 
+    WHERE e.approve != 0;
 ");
 
 if ($result) {
@@ -60,8 +52,8 @@ $conn->close();
                 <section class="flex justify-between mb-5">
                     <h1 class="text-2xl font-bold mb-4">Employee List</h1>
                     <div class="flex justify-end gap-5">
-                        <a href="registration/employee.php"  class="btn btn-accent">Add Employee</a>
-                        <a href="registration/employee_action.php"  class="btn btn-info">Action</a>
+                        <a href="registration/employee.php" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'disabled' : ''; ?> title="Only User1 can access this page"> Add Employee </a>
+                        <a href="registration/employee_action.php" class="btn btn-info" <?php echo ($userrole_id != 1 && $userrole_id != 2) ? 'disabled' : ''; ?> title="Only User1 can access this page"> Action </a>
                     </div>
                 </section>
 

@@ -1,17 +1,6 @@
 <?php
-session_start();
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    // Redirect to the login page if not authenticated
-    header('Location: index.php');
-    exit();
-}
-
-// Include the database connection
+include 'view.php'; 
 include 'db_conn.php';
-
-// Initialize an array to store all employees' data
 $employeesData = [];
 
 // Fetch all allowances from allowanceList
@@ -35,11 +24,12 @@ while ($row = $deductionList_result->fetch_assoc()) {
 $deductionList_stmt->close();
 
 // Fetch all employees
-$employees_stmt = $conn->prepare(" SELECT e.id AS employee_id, e.employeeNo, e.name, e.contactNo, e.email, e.empStatus, e.no_of_increment, e.basic, e.account_number, e.e_tin, e.joining_date, e.image, d.designation AS primary_designation, dept.department_name, g.grade, g.scale
+$employees_stmt = $conn->prepare(" SELECT e.id AS employee_id, e.employeeNo, e.name, e.contactNo, e.email, e.empStatus, e.no_of_increment, e.basic, e.account_number, e.e_tin, e.joining_date, e.image, e.approve, d.designation AS primary_designation, dept.department_name, g.grade, g.scale
                                                 FROM employee e
                                                 JOIN designations d ON e.designation_id = d.id
                                                 JOIN departments dept ON e.department_id = dept.id
                                                 JOIN grade g ON e.grade_id = g.id
+                                                WHERE e.approve != 0
                                                 ORDER BY 
                                                 dept.department_name ASC,
                                                 g.grade ASC,
@@ -282,7 +272,7 @@ $conn->close();
                     <div>
                         <!-- Include a hidden input with employee ID and submit button -->
                         <input type="hidden" name="employee_id[]" value="<?php echo $data['employee']['employee_id']; ?>">
-                        <button type="submit" name="submitPayroll" class="bg-blue-500 text-white px-4 py-2 rounded-md">Submit</button>
+                        <button type="submit" name="submitPayroll" class="btn btn-primary text-white px-4 py-2 rounded-md" <?php echo ($userrole_id != 1 && $userrole_id != 2) ? 'disabled' : ''; ?> title="Only Admin and HR can access this page">Submit</button>
                     </div>
                 </div>
                 <section class="container mx-auto px-4 mt-24">

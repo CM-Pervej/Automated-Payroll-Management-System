@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Payroll Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.0.0/dist/full.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-6">
+        <div class="relative flex justify-center items-center w-full mb-5">
+            <h1 class="text-3xl font-bold text-center">Admin Panel</h1>
+            <p class="absolute flex justify-end right-0 gap-3">
+                <a href="#"><button class="btn btn-primary"> Users</button></a>
+                <a href="#"><button class="btn btn-primary">Registration</button></a>
+            </p>
+        </div>
+        
+        <section class="mb-5">
+            <!-- User Approval List -->
+            <div class="bg-white p-6 rounded-lg shadow-md border">
+                <h2 class="text-xl font-semibold mb-4">Pending Approvals for Users only</h2>
+                <table class="table w-full">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>John Doe</td>
+                            <td>john@example.com</td>
+                            <td>HR Manager</td>
+                            <td>
+                                <button class="btn btn-success btn-sm">Approve</button>
+                                <button class="btn btn-error btn-sm">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Jane Smith</td>
+                            <td>jane@example.com</td>
+                            <td>User</td>
+                            <td>
+                                <button class="btn btn-success btn-sm">Approve</button>
+                                <button class="btn btn-error btn-sm">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Employee Approval List -->
+            <div class="bg-white p-6 rounded-lg shadow-md border">
+                <h2 class="text-xl font-semibold mb-4">Pending Approvals for Employee</h2>
+                <table class="table w-full">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Designation</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>John Doe</td>
+                            <td>john@example.com</td>
+                            <td>HR Manager</td>
+                            <td>
+                                <button class="btn btn-success btn-sm">Approve</button>
+                                <button class="btn btn-error btn-sm">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Jane Smith</td>
+                            <td>jane@example.com</td>
+                            <td>User</td>
+                            <td>
+                                <button class="btn btn-success btn-sm">Approve</button>
+                                <button class="btn btn-error btn-sm">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="flex justify-between gap-3">
+            <!-- User Approval List -->
+            <div class="bg-white p-6 rounded-lg shadow-md flex-1 border">
+                <h2 class="text-xl font-semibold mb-4">Last Approved Users</h2>
+                <table class="table w-full">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>John Doe</td>
+                            <td>john@example.com</td>
+                            <td>HR Manager</td>
+                            <td>
+                                <button class="btn btn-success btn-sm">Approve</button>
+                                <button class="btn btn-error btn-sm">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Jane Smith</td>
+                            <td>jane@example.com</td>
+                            <td>User</td>
+                            <td>
+                                <button class="btn btn-success btn-sm">Approve</button>
+                                <button class="btn btn-error btn-sm">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Employee Approval List -->
+            <div class="bg-white p-6 rounded-lg shadow-md flex-1 border">
+                <h2 class="text-xl font-semibold mb-4">Last Approved Employee</h2>
+                <table class="table w-full">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Designation</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>John Doe</td>
+                            <td>john@example.com</td>
+                            <td>HR Manager</td>
+                            <td>
+                                <button class="btn btn-success btn-sm">Approve</button>
+                                <button class="btn btn-error btn-sm">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Jane Smith</td>
+                            <td>jane@example.com</td>
+                            <td>User</td>
+                            <td>
+                                <button class="btn btn-success btn-sm">Approve</button>
+                                <button class="btn btn-error btn-sm">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

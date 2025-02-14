@@ -77,8 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $basic = (float)$scale;
 
         $stmt = $conn->prepare("INSERT INTO employee 
-            (employeeNo, name, date_of_birth, gender, contactNo, email, empStatus, designation_id, department_id, basic, account_number, grade_id, joining_date, e_tin, image) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            (employeeNo, name, date_of_birth, gender, contactNo, email, empStatus, designation_id, department_id, basic, account_number, grade_id, joining_date, e_tin, image, approve) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)");
         $stmt->bind_param(
             "sssssssiisdssss",
             $employeeNo, $name, $date_of_birth, $gender, $contactNo, $email, $empStatus, $designation_id,
@@ -86,11 +86,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         );
 
         if ($stmt->execute()) {
-            $successMessage = "Employee added successfully!";
             $employee_id = $conn->insert_id; // Get the last inserted employee ID
+        
+            // Now show the alert and redirect
+            echo "<script>
+                alert('Set your password now');
+                window.location.href = 'password.php?employee_id=$employee_id';
+            </script>";
+            exit;
         } else {
             $errorMessages[] = "Database error: " . $stmt->error;
-        }
+        }         
 
         $stmt->close();
     }
@@ -108,40 +114,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://kit.fontawesome.com/8e69038194.js" crossorigin="anonymous"></script>
-    <script>
-        function showAlert(employeeId) {
-            const alertBox = document.getElementById('alertBox');
-            alertBox.style.display = 'block';
-
-            // Update Yes and No buttons with the employee ID
-            document.getElementById('yesButton').href = `user.php?employee_id=${employeeId}`;
-            document.getElementById('noButton').href = `../profile.php?employee_id=${employeeId}`;
-        }
-    </script>
 </head>
 <body>
-    <!-- Alert Box -->
-    <div id="alertBox" style="display: none;" class="fixed top-0 left-0 w-full bg-yellow-200 p-4 shadow-lg z-50">
-        <p class="text-lg text-gray-800 font-semibold text-center">If this is a user then click Yes, otherwise No.</p>
-        <div class="flex justify-center space-x-4 mt-2">
-            <a id="yesButton" href="#" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Yes</a>
-            <a id="noButton" href="#" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">No</a>
-        </div>
-    </div>
-
     <!-- Form -->
     <div class="container mx-auto p-5">
         <div class="bg-white rounded-lg shadow-lg p-8">
             <h1 class="text-3xl font-semibold text-center text-gray-800">Add Employee</h1>
-            
-            <?php if (!empty($successMessage)): ?>
-                <script>
-                    // Show the alert box after successful submission
-                    document.addEventListener('DOMContentLoaded', function () {
-                        showAlert(<?php echo $employee_id; ?>);
-                    });
-                </script>
-            <?php endif; ?>
+
             <?php if (!empty($errorMessages)): ?>
                 <div class="text-red-600 text-center"><?php echo implode('<br>', $errorMessages); ?></div>
             <?php endif; ?>

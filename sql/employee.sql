@@ -16,6 +16,7 @@ CREATE TABLE employee (
     grade_id INT NOT NULL,
     joining_date DATE NOT NULL,
     e_tin VARCHAR(50) NOT NULL,
+    approve INT NOT NULL,
     
     FOREIGN KEY (designation_id) REFERENCES designations(id),
     FOREIGN KEY (department_id) REFERENCES departments(id),
