@@ -41,6 +41,12 @@ if (isset($_POST['approve_employee'])) {
         $stmt = $conn->prepare($updateApproveStatusQuery);
         $stmt->bind_param("ii", $approval_status, $employee_id);
         $stmt->execute();
+
+        // Update the user's status in the user table
+        $updateUserStatusQuery = "UPDATE user SET status = ? WHERE employee_id = ?";
+        $stmt = $conn->prepare($updateUserStatusQuery);
+        $stmt->bind_param("ii", $approval_status, $employee_id);
+        $stmt->execute();
     }
 
     // Refresh the page after the form submission (staying on the same page)
@@ -77,12 +83,29 @@ $conn->close();
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-blue-50 h-screen flex overflow-hidden">
+    <!-- Sidebar (fixed) -->
+    <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
+        <?php include 'sideBar.php'; ?>
+    </header>
+
     <div class="flex flex-col flex-grow ml-64">
+        <!-- Top Bar (fixed) -->
+        <div class="w-full">
+            <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
+                <?php include 'topBar.php'; ?>
+            </aside>
+        </div>
+
         <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">
+            <section class="flex justify-end items-center gap-4">
+                <a href="../profile.php?employee_id=2" class="text-blue-600 hover:underline text-lg font-bold">Profile </a> //
+                <a href="userShow.php" class="text-blue-600 hover:underline text-lg font-bold">Users</a> //
+                <a href="#" class="text-blue-600 hover:underline text-lg font-bold">Employee</a>
+            </section>
             <!-- Employees without User Account Table -->
             <section>
                 <h1 class="text-2xl font-bold mb-4">Employee</h1>
-                <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg">
+                <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg w-full">
                     <thead>
                         <tr class="bg-gray-200">
                             <th class="px-4 py-2 text-left">Employee</th>
@@ -95,29 +118,37 @@ $conn->close();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($employeesWithoutUser as $employee): ?>
-                            <tr class="hover:bg-gray-100">
-                                <td class="px-4 py-2"><?php echo htmlspecialchars($employee['employeeNo']); ?></td>
-                                <td class="px-4 py-2"><?php echo htmlspecialchars($employee['name']); ?></td>
-                                <td class="px-4 py-2"><?php echo htmlspecialchars($employee['grade']); ?></td>
-                                <td class="px-4 py-2"><?php echo htmlspecialchars($employee['designation']); ?></td>
-                                <td class="px-4 py-2"><?php echo htmlspecialchars($employee['department_name']); ?></td>
-                                <td class="px-4 py-2"><?php echo htmlspecialchars($employee['email']); ?></td>
-                                <td class="px-4 py-2">
-                                    <form method="post">
-                                        <input type="hidden" name="employee_id" value="<?= $employee['id'] ?>">
-                                        <select name="approval_status" class="border p-2 rounded">
-                                            <option value="1">Approve</option>
-                                            <option value="0">Pending</option>
-                                            <option value="delete">Reject (Delete)</option>
-                                        </select>
-                                        <button type="submit" name="approve_employee" class="bg-blue-500 text-white px-4 py-1 rounded">
-                                            Submit
-                                        </button>
-                                    </form>
+                        <?php if (empty($employeesWithoutUser)): ?>
+                            <tr>
+                                <td colspan="7" class="px-4 py-2 text-center text-gray-500">
+                                    No employees for approval.
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php else: ?>
+                            <?php foreach ($employeesWithoutUser as $employee): ?>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="px-4 py-2"><?php echo htmlspecialchars($employee['employeeNo']); ?></td>
+                                    <td class="px-4 py-2"><?php echo htmlspecialchars($employee['name']); ?></td>
+                                    <td class="px-4 py-2"><?php echo htmlspecialchars($employee['grade']); ?></td>
+                                    <td class="px-4 py-2"><?php echo htmlspecialchars($employee['designation']); ?></td>
+                                    <td class="px-4 py-2"><?php echo htmlspecialchars($employee['department_name']); ?></td>
+                                    <td class="px-4 py-2"><?php echo htmlspecialchars($employee['email']); ?></td>
+                                    <td class="px-4 py-2">
+                                        <form method="post">
+                                            <input type="hidden" name="employee_id" value="<?= $employee['id'] ?>">
+                                            <select name="approval_status" class="border p-2 rounded">
+                                                <option value="1">Approve</option>
+                                                <option value="0">Pending</option>
+                                                <option value="delete">Reject (Delete)</option>
+                                            </select>
+                                            <button type="submit" name="approve_employee" class="bg-blue-500 text-white px-4 py-1 rounded">
+                                                Submit
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </section>
@@ -125,7 +156,7 @@ $conn->close();
             <!-- Employees with User Account Table -->
             <section class="mt-14">
                 <h1 class="text-2xl font-bold mb-4 px-2 pt-2">Users</h1>
-                <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg">
+                <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg w-full">
                     <thead>
                         <tr class="bg-gray-200">
                             <th class="px-4 py-2 text-left">User</th>
@@ -139,30 +170,38 @@ $conn->close();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($employeesWithUser as $employee) : ?>
+                        <?php if (empty($employeesWithUser)): ?>
                             <tr>
-                                <td class="px-4 py-2"><?= htmlspecialchars($employee['employeeNo']) ?></td>
-                                <td class="px-4 py-2"><?= htmlspecialchars($employee['name']) ?></td>
-                                <td class="px-4 py-2"><?= htmlspecialchars($employee['grade']) ?></td>
-                                <td class="px-4 py-2"><?= htmlspecialchars($employee['department_name']) ?></td>
-                                <td class="px-4 py-2"><?= htmlspecialchars($employee['designation']) ?></td>
-                                <td class="px-4 py-2"><?= htmlspecialchars($employee['email']) ?></td>
-                                <td class="px-4 py-2"><?= htmlspecialchars($employee['role']) ?></td>
-                                <td class="px-4 py-2">
-                                    <form method="post" class="flex">
-                                        <input type="hidden" name="employee_id" value="<?= $employee['id'] ?>">
-                                        <select name="approval_status" class="border p-2 rounded">
-                                            <option value="1">Approve</option>
-                                            <option value="0">Pending</option>
-                                            <option value="delete">Reject (Delete)</option>
-                                        </select>
-                                        <button type="submit" name="approve_employee" class="bg-blue-500 text-white px-4 py-1 rounded">
-                                            Submit
-                                        </button>
-                                    </form>
+                                <td colspan="8" class="px-4 py-2 text-center text-gray-500">
+                                    No users for approval.
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php else: ?>
+                            <?php foreach ($employeesWithUser as $employee) : ?>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="px-4 py-2"><?= htmlspecialchars($employee['employeeNo']) ?></td>
+                                    <td class="px-4 py-2"><?= htmlspecialchars($employee['name']) ?></td>
+                                    <td class="px-4 py-2"><?= htmlspecialchars($employee['grade']) ?></td>
+                                    <td class="px-4 py-2"><?= htmlspecialchars($employee['designation']) ?></td>
+                                    <td class="px-4 py-2"><?= htmlspecialchars($employee['department_name']) ?></td>
+                                    <td class="px-4 py-2"><?= htmlspecialchars($employee['email']) ?></td>
+                                    <td class="px-4 py-2"><?= htmlspecialchars($employee['role']) ?></td>
+                                    <td class="px-4 py-2">
+                                        <form method="post" class="flex">
+                                            <input type="hidden" name="employee_id" value="<?= $employee['id'] ?>">
+                                            <select name="approval_status" class="border p-2 rounded">
+                                                <option value="1">Approve</option>
+                                                <option value="0">Pending</option>
+                                                <option value="delete">Reject (Delete)</option>
+                                            </select>
+                                            <button type="submit" name="approve_employee" class="bg-blue-500 text-white px-4 py-1 rounded">
+                                                Submit
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </section>

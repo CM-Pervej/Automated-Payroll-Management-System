@@ -49,8 +49,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Insert into the user table
-        $stmt = $conn->prepare("INSERT INTO user (employee_id, employeeNo, name, userrole_id, email, password) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ississ", $employeeId, $employeeNo, $name, $userrole_id, $email, $hashed_password);
+        $status = 1; // Default status value
+        $stmt = $conn->prepare("INSERT INTO user (employee_id, employeeNo, name, userrole_id, email, password, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ississi", $employeeId, $employeeNo, $name, $userrole_id, $email, $hashed_password, $status);
+        
 
         if ($stmt->execute()) {
             // Redirect to profile page after successful registration
