@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Now show the alert and redirect
             echo "<script>
                 alert('Set your password now');
-                window.location.href = 'password.php?employee_id=$employee_id';
+                window.location.href = 'passRequest.php?employee_id=$employee_id';
             </script>";
             exit;
         } else {

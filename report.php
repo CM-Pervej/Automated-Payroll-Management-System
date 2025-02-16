@@ -185,7 +185,7 @@ if ($result) {
                 </select>
                 <!-- <button class="btn btn-primary"><a href="report/link.php"></a></button> -->
                 <!-- <button onclick="window.location.href='report/link.php';">Download</button> -->
-                <button class="btn btn-primary" onclick="window.open('report/link.php', '_blank');" <?php echo ($userrole_id != 1 && $userrole_id != 2) ? 'disabled' : ''; ?> title="Only Admin and HR can access this page">Download</button>
+                <button class="btn btn-primary" onclick="window.open('report/link.php', '_blank');" <?php echo ($userrole_id != 1 && $userrole_id != 2) ? 'hidden' : ''; ?> title="Only Admin and HR can access this page">Download</button>
 
             </div>
 

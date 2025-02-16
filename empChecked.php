@@ -93,7 +93,7 @@ $conn->close();
                     <section class="flex justify-between items-center mb-5">
                         <h1 class="text-2xl font-bold mb-4">Employee List</h1>
                         <div class="">
-                            <button type="submit" name="delete_all" class="btn btn-error text-white py-2 px-4 rounded hover:bg-red-700" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'disabled' : ''; ?> title="Only Admin and HR can access this page">Delete Selected</button>
+                            <button type="submit" name="delete_all" class="btn btn-error text-white py-2 px-4 rounded hover:bg-red-700" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'hidden' : ''; ?> title="Only Admin and HR can access this page">Delete Selected</button>
                         </div>
                     </section>
                     <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg">

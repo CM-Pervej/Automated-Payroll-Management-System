@@ -105,7 +105,7 @@ $conn->close();
                             </div>
                         </div>
                         <div class="pt-5 text-center">
-                            <span> Don't have account? <a href="registration/employee.php" class="text-green-500 hover:text-blue-500">Sign up here</a> </span>
+                            <span> Don't have account? <a href="users/userRequest.php" class="text-green-500 hover:text-blue-500">Sign up here</a> </span>
                         </div>
                     </div>
                 </form>

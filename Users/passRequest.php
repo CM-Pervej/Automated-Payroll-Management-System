@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Insert into the user table
-        $status = 1; // Default status value
+        $status = 2; // Default status value
         $stmt = $conn->prepare("INSERT INTO user (employee_id, employeeNo, name, userrole_id, email, password, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ississi", $employeeId, $employeeNo, $name, $userrole_id, $email, $hashed_password, $status);
         

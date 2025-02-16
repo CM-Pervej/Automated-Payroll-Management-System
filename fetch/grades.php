@@ -68,25 +68,25 @@ $conn->close();
 </head>
 <body class="bg-blue-50 h-screen flex overflow-hidden">
     <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
-        <?php include 'sideBar.php'; ?>
+        <?php include '../sideBar.php'; ?>
     </header>
 
     <div class="flex flex-col flex-grow ml-64">
         <div class="w-full">
             <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
-                <?php include 'topBar.php'; ?>
+                <?php include '../topBar.php'; ?>
             </aside>
         </div>
         
-        <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">
+        <main class="flex-grow p-8 mt-5 bg-white shadow-lg overflow-auto">
             <div class="mx-auto bg-white p-10">
                 <section class="flex justify-between mb-5">
                     <h1 class="text-2xl font-bold mb-4">Grade List</h1>
                     <div class="flex justify-end gap-5">
-                        <button id="addGradeButton" class="btn btn-success text-white px-4 py-2 rounded hover:bg-green-700 flex items-center" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'disabled' : ''; ?> title="Only Admin and HR can access this page">
+                        <button id="addGradeButton" class="btn btn-success text-white px-4 py-2 rounded hover:bg-green-700 flex items-center" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'style="display:none;"' : ''; ?> title="Only Admin and HR can access this page">
                             <i class="fas fa-plus mr-2"></i> Add Grade
                         </button>
-                        <a href="gradeChange.php" class="btn btn-info" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'disabled' : ''; ?> title="Only Admin and HR can access this page">Action</a>
+                        <a href="gradeChange.php" class="btn btn-info" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'style="display:none;"' : ''; ?> title="Only Admin and HR can access this page">Action</a>
                     </div>
                 </section>
 

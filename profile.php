@@ -164,13 +164,13 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
 
                 <!-- Navigation Links -->
                 <div class="flex justify-center gap-4">
-                    <a href="select/addAllowance.php?employee_id=<?php echo $employee_id; ?>" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'disabled' : ''; ?> title="Only User1 can access this page">Allowance</a>
-                    <a href="select/addDeduction.php?employee_id=<?php echo $employee_id; ?>" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'disabled' : ''; ?> title="Only User1 can access this page">Deduction</a>
-                    <a href="select/empCharge.php?employee_id=<?php echo $employee_id; ?>" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'disabled' : ''; ?> title="Only User1 can access this page">Additional Duty</a>
-                    <a href="select/updateProfile.php?employee_id=<?php echo $employee_id; ?>" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'disabled' : ''; ?> title="Only User1 can access this page">Update</a>
+                    <a href="select/addAllowance.php?employee_id=<?php echo $employee_id; ?>" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'style="display:none;"' : ''; ?> title="Only User1 can access this page">Allowance</a>
+                    <a href="select/addDeduction.php?employee_id=<?php echo $employee_id; ?>" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'style="display:none;"' : ''; ?> title="Only User1 can access this page">Deduction</a>
+                    <a href="select/empCharge.php?employee_id=<?php echo $employee_id; ?>" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'style="display:none;"' : ''; ?> title="Only User1 can access this page">Additional Duty</a>
+                    <a href="select/updateProfile.php?employee_id=<?php echo $employee_id; ?>" class="btn btn-primary">Update</a>
                     <form method="POST">
                         <input type="hidden" name="employee_id" value="<?php echo $employee_id; ?>" />
-                        <button type="submit" class="btn btn-success" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'disabled' : ''; ?> title="Only User1 can access this page">Confirm</button>
+                        <button type="submit" class="btn btn-success" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'style="display:none;"' : ''; ?> title="Only User1 can access this page">Confirm</button>
                     </form>
                 </div>
 

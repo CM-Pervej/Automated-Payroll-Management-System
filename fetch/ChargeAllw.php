@@ -72,16 +72,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body class="bg-blue-50 h-screen flex overflow-hidden">
     <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
-        <?php include 'sideBar.php'; ?>
+        <?php include '../sideBar.php'; ?>
     </header>
     <div class="flex flex-col flex-grow ml-64">
         <div class="w-full">
             <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
-                <?php include 'topBar.php'; ?>
+                <?php include '../topBar.php'; ?>
             </aside>
         </div>
 
-        <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">
+        <main class="flex-grow p-8 mt-5 bg-white shadow-lg overflow-auto">
             <div class="mx-auto bg-white p-10">
                 <?php if (!empty($success_message)): ?>
                     <div class="text-green-700 bg-green-100 p-4 rounded mb-4 font-bold">

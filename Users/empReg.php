@@ -1,14 +1,12 @@
 <?php
 session_start();
 
-// Check if the user is logged in and is User1
+// Check if the user is logged in and has the HR role
 if (!isset($_SESSION['user_id']) || ($_SESSION['userrole_id'] != 1 && $_SESSION['userrole_id'] != 2 && $_SESSION['userrole_id'] != 3)) {
-    header('Location: ../dashboard.php'); // Redirect to dashboard if not User1
+    header('Location: ../dashboard.php'); // Redirect to dashboard if not HR or Admin
     exit();
 }
-?>
 
-<?php
 // Include the database connection
 include '../db_conn.php';
 
@@ -32,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date_of_birth = htmlspecialchars(trim($_POST['date_of_birth']));
     $contactNo = htmlspecialchars(trim($_POST['contactNo']));
     $email = htmlspecialchars(trim($_POST['email']));
-    $empStatus = htmlspecialchars(trim($_POST['empStatus']));
+    // $empStatus = htmlspecialchars(trim($_POST['empStatus']));
     $designation_id = (int) htmlspecialchars(trim($_POST['designation_id']));
     $department_id = (int) htmlspecialchars(trim($_POST['department_id']));
     $account_number = htmlspecialchars(trim($_POST['account_number']));
@@ -88,10 +86,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $stmt = $conn->prepare("INSERT INTO employee 
             (employeeNo, name, date_of_birth, gender, contactNo, email, empStatus, designation_id, department_id, basic, account_number, grade_id, joining_date, e_tin, image, approve) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)");
+            VALUES (?, ?, ?, ?, ?, ?, 2, ?, ?, ?, ?, ?, ?, ?, ?, 0)");
         $stmt->bind_param(
-            "sssssssiisdssss",
-            $employeeNo, $name, $date_of_birth, $gender, $contactNo, $email, $empStatus, $designation_id,
+            "ssssssiisdssss",
+            $employeeNo, $name, $date_of_birth, $gender, $contactNo, $email, $designation_id,
             $department_id, $basic, $account_number, $grade_id, $joining_date, $e_tin, $imagePath
         );
 
@@ -100,8 +98,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
             // Now show the alert and redirect
             echo "<script>
-                alert('Set your password now');
-                window.location.href = 'password.php?employee_id=$employee_id';
+                alert('Registration completed successfully, now wait for the approval process to finish');
+                window.location.href = '../employee.php';
             </script>";
             exit;
         } else {
@@ -203,22 +201,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </tr>
                                 <tr>
                                     <td class="py-2">
-                                        <label for="empStatus" class="text-gray-700">Employee Status</label>
-                                    </td>
-                                    <td class="py-2">
-                                        <select name="empStatus" id="empStatus" required 
-                                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                                            <option value="" disabled selected class="bg-gray-300">Select Employee Status</option>
-                                            <option value="Active">Active</option>
-                                            <option value="In Active">In Active</option>
-                                            <!-- <option value="On Leave">On Leave</option>
-                                            <option value="Terminated">Terminated</option>
-                                            <option value="Retired">Retired</option> -->
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2">
                                         <label for="designation_id" class="text-gray-700">Designation</label>
                                     </td>
                                     <td class="py-2">
@@ -305,4 +287,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>    
 </body>
 </html>
-

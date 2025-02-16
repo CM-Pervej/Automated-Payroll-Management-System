@@ -272,7 +272,7 @@ $conn->close();
                     <div>
                         <!-- Include a hidden input with employee ID and submit button -->
                         <input type="hidden" name="employee_id[]" value="<?php echo $data['employee']['employee_id']; ?>">
-                        <button type="submit" name="submitPayroll" class="btn btn-primary text-white px-4 py-2 rounded-md" <?php echo ($userrole_id != 1 && $userrole_id != 2) ? 'disabled' : ''; ?> title="Only Admin and HR can access this page">Submit</button>
+                        <button type="submit" name="submitPayroll" class="btn btn-primary text-white px-4 py-2 rounded-md" <?php echo ($userrole_id != 1 && $userrole_id != 2) ? 'hidden' : ''; ?> title="Only Admin and HR can access this page">Submit</button>
                     </div>
                 </div>
                 <section class="container mx-auto px-4 mt-24">

@@ -2,7 +2,7 @@
 session_start();
 
 // Check if the user is logged in and is an Admin
-if (!isset($_SESSION['user_id']) || $_SESSION['userrole_id'] != 1) {
+if (!isset($_SESSION['user_id']) || ($_SESSION['userrole_id'] != 1 && $_SESSION['userrole_id'] != 2)) {
     header('Location: ../dashboard.php'); // Redirect to dashboard if not Admin
     exit();
 }
@@ -92,7 +92,7 @@ $conn->close();
         <!-- Top Bar (fixed) -->
         <div class="w-full">
             <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
-                <?php include 'topBar.php'; ?>
+                <?php include '../topBar.php'; ?>
             </aside>
         </div>
 
@@ -187,14 +187,20 @@ $conn->close();
                                     <td class="px-4 py-2"><?= htmlspecialchars($employee['email']) ?></td>
                                     <td class="px-4 py-2"><?= htmlspecialchars($employee['role']) ?></td>
                                     <td class="px-4 py-2">
-                                        <form method="post" class="flex">
+                                        <form method="post" class="flex gap-1">
                                             <input type="hidden" name="employee_id" value="<?= $employee['id'] ?>">
                                             <select name="approval_status" class="border p-2 rounded">
                                                 <option value="1">Approve</option>
                                                 <option value="0">Pending</option>
                                                 <option value="delete">Reject (Delete)</option>
                                             </select>
-                                            <button type="submit" name="approve_employee" class="bg-blue-500 text-white px-4 py-1 rounded">
+                                            <button type="submit" name="approve_employee" class="bg-blue-500 text-white px-4 py-1 rounded"
+                                                <?php
+                                                // Restrict submission for HR Manager (userrole_id = 2) if approving an Admin or HR Manager
+                                                if ($_SESSION['userrole_id'] == 2 && ($employee['role'] == "Admin" || $employee['role'] == "HR Manager")) {
+                                                    echo "disabled title='You cannot approve this role'";
+                                                }
+                                                ?>>
                                                 Submit
                                             </button>
                                         </form>

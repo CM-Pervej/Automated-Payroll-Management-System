@@ -101,7 +101,7 @@ $conn->close();
             <div class="container mx-auto p-5">
                 <div class="relative flex items-center justify-center mb-5">
                     <h1 class="text-3xl font-bold">User Management</h1>
-                    <a href="userReg.php" class="absolute right-0 px-4 py-2 bg-blue-500 text-white rounded">ADD Users</a>
+                    <a href="userSet.php" class="absolute right-0 px-4 py-2 bg-blue-500 text-white rounded">ADD Users</a>
                 </div>
 
                 <!-- Active Users Section -->

@@ -14,7 +14,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Fetch user details
 $user_id = $_SESSION['user_id'];
-$query = "SELECT user.name, user.userrole_id FROM user WHERE user.id = ?";
+$query = "SELECT user.name, user.userrole_id, user.employee_id  FROM user WHERE user.id = ?";
 
 if ($stmt = $conn->prepare($query)) {
     $stmt->bind_param('i', $user_id);
@@ -25,13 +25,13 @@ if ($stmt = $conn->prepare($query)) {
 }
 
 // Determine profile page
-$profile_page = "#";
+$settings = "#";
 if ($user['userrole_id'] == 1) {
-    $profile_page = "users/admin.php";
+    $settings = "users/settings.php";
 } elseif ($user['userrole_id'] == 2) {
-    $profile_page = "users/hr.php";
+    $settings = "users/settings.php";
 } elseif ($user['userrole_id'] == 3 || $user['userrole_id'] == 4) {
-    $profile_page = "user.php";
+    $settings = "user.php";
 }
 
 ?>
@@ -83,9 +83,9 @@ if ($user['userrole_id'] == 1) {
                     <span class="text-black font-semibold"><?php echo htmlspecialchars($user['name']); ?></span>
                 </button>
                 <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 text-gray-800 z-20">
-                    <a href="<?php echo $profile_page; ?>" class="block px-4 py-2 hover:bg-gray-200">Profile</a>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-200">Settings</a>
-                    <a href="logout.php" class="block px-4 py-2 text-red-600 hover:bg-gray-200">Logout</a>
+                    <a href="/payroll/profile.php?employee_id=<?php echo $user['employee_id']; ?>" class="block px-4 py-2 hover:bg-gray-200">Profiles</a>
+                    <a href="/payroll/<?php echo $settings; ?>" class="block px-4 py-2 hover:bg-gray-200">Settings</a>
+                    <a href="/payroll/logout.php" class="block px-4 py-2 text-red-600 hover:bg-gray-200">Logout</a>
                 </div>
             </div>
         </div>

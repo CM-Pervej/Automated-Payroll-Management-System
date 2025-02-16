@@ -1,5 +1,14 @@
 <?php
-include 'auth.php';
+session_start();
+
+// Check if the user is logged in and is User1
+if (!isset($_SESSION['user_id']) || ($_SESSION['userrole_id'] != 1 && $_SESSION['userrole_id'] != 2 && $_SESSION['userrole_id'] != 3 && $_SESSION['userrole_id'] != 4)) {
+    header('Location: ../dashboard.php'); // Redirect to dashboard if not User1
+    exit();
+}
+// Fetch the user role from the session
+$userrole_id = $_SESSION['userrole_id'];
+
 include '../db_conn.php';
 
 $employee_id = $_GET['employee_id'] ?? null;
@@ -161,18 +170,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="text" name="email" id="email" value="<?php echo htmlspecialchars($employee['email']); ?>" required class="input input-bordered w-full mt-2" />
                     </div>
                     <!-- Employee Status Select -->
-                    <div>
+                    <div <?php echo ($userrole_id == 3) ? 'hidden' : ''; ?>>
                         <label for="empStatus" class="text-gray-700">Employee Status</label>
                         <select name="empStatus" id="empStatus" required 
                                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
                             <option value="Active" <?php echo ($employee['empStatus'] == 'Active') ? 'selected' : ''; ?>>Active</option>
                             <option value="In Active" <?php echo ($employee['empStatus'] == 'In Active') ? 'selected' : ''; ?>>In Active</option>
-                            <!-- <option value="On Leave" <?php echo ($employee['empStatus'] == 'On Leave') ? 'selected' : ''; ?>>On Leave</option>
-                            <option value="Terminated" <?php echo ($employee['empStatus'] == 'Terminated') ? 'selected' : ''; ?>>Terminated</option>
-                            <option value="Retired" <?php echo ($employee['empStatus'] == 'Retired') ? 'selected' : ''; ?>>Retired</option> -->
                         </select>
                     </div>
-                    <div>
+                    <div <?php echo ($userrole_id == 3) ? 'hidden' : ''; ?>>
                         <label for="designation_id" class="text-lg font-medium">Designation</label>
                         <select name="designation_id" id="designation_id" required class="select select-bordered w-full mt-2">
                             <?php foreach ($designations as $designation): ?>
@@ -182,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div>
+                    <div <?php echo ($userrole_id == 3) ? 'hidden' : ''; ?>>
                         <label for="department_id" class="text-lg font-medium">Department</label>
                         <select name="department_id" id="department_id" required class="select select-bordered w-full mt-2">
                             <?php foreach ($departments as $department): ?>
@@ -192,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div>
+                    <div <?php echo ($userrole_id == 3) ? 'hidden' : ''; ?>>
                         <label for="grade_id" class="text-lg font-medium">Grade</label>
                         <select name="grade_id" id="grade_id" required class="select select-bordered w-full mt-2">
                             <?php foreach ($grades as $grade): ?>
@@ -202,19 +208,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div>
+                    <div <?php echo ($userrole_id == 3) ? 'hidden' : ''; ?>>
                         <label for="no_of_increment" class="text-lg font-medium">No. of Increments</label>
                         <input type="number" name="no_of_increment" id="no_of_increment" value="<?php echo htmlspecialchars($employee['no_of_increment']); ?>" required class="input input-bordered w-full mt-2" />
                     </div>
-                    <div>
+                    <div <?php echo ($userrole_id == 3) ? 'hidden' : ''; ?>>
                         <label for="account_number" class="text-lg font-medium">Account Number</label>
                         <input type="text" name="account_number" id="account_number" value="<?php echo htmlspecialchars($employee['account_number']); ?>" class="input input-bordered w-full mt-2" />
                     </div>
-                    <div>
+                    <div <?php echo ($userrole_id == 3) ? 'hidden' : ''; ?>>
                         <label for="joining_date" class="text-lg font-medium">Joining Date</label>
                         <input type="date" name="joining_date" id="joining_date" value="<?php echo htmlspecialchars($employee['joining_date']); ?>" class="input input-bordered w-full mt-2" />
                     </div>
-                    <div>
+                    <div <?php echo ($userrole_id == 3) ? 'hidden' : ''; ?>>
                         <label for="e_tin" class="text-lg font-medium">E-TIN</label>
                         <input type="text" name="e_tin" id="e_tin" value="<?php echo htmlspecialchars($employee['e_tin']); ?>" class="input input-bordered w-full mt-2" />
                     </div>

@@ -68,22 +68,22 @@ $conn->close();
 </head>
 <body class="bg-blue-50 h-screen flex overflow-hidden">
     <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
-        <?php include 'sideBar.php'; ?>
+        <?php include '../sideBar.php'; ?>
     </header>
     <div class="flex flex-col flex-grow ml-64">
         <div class="w-full">
             <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
-                <?php include 'topBar.php'; ?>
+                <?php include '../topBar.php'; ?>
             </aside>
         </div>
 
         <!-- Main Content -->
-        <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">
+        <main class="flex-grow p-8 mt-5 bg-white shadow-lg overflow-auto">
             <div class="mx-auto bg-white p-10">
-                <header class="mb-8 text-left">
+                <div class="mb-8 text-left">
                     <h1 class="text-3xl font-semibold text-gray-700">Manage Allowances</h1>
                     <p class="text-gray-500">Update and manage additional allowances within the payroll system</p>
-                </header>
+                </div>
 
                 <?php if (isset($message)) echo $message; ?>
 

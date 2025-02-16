@@ -52,8 +52,8 @@ $conn->close();
                 <section class="flex justify-between mb-5">
                     <h1 class="text-2xl font-bold mb-4">Employee List</h1>
                     <div class="flex justify-end gap-5">
-                        <a href="registration/employee.php" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'disabled' : ''; ?> title="Only User1 can access this page"> Add Employee </a>
-                        <a href="registration/employee_action.php" class="btn btn-info" <?php echo ($userrole_id != 1 && $userrole_id != 2) ? 'disabled' : ''; ?> title="Only User1 can access this page"> Action </a>
+                        <a href="users/empReg.php" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'hidden' : ''; ?> title="Only User1 can access this page"> Add Employee </a>
+                        <a href="registration/employee_action.php" class="btn btn-info" <?php echo ($userrole_id != 1 && $userrole_id != 2) ? 'hidden' : ''; ?> title="Only User1 can access this page"> Action </a>
                     </div>
                 </section>
 
