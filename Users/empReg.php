@@ -126,14 +126,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body class="bg-blue-50 h-screen flex overflow-hidden">
     <!-- Sidebar (fixed) -->
     <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
-        <?php include 'sideBar.php'; ?>
+        <?php include '../sideBar.php'; ?>
     </header>
 
     <div class="flex flex-col flex-grow ml-64">
         <!-- Top Bar (fixed) -->
         <div class="w-full">
             <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
-                <?php include 'topBar.php'; ?>
+                <?php include '../topBar.php'; ?>
             </aside>
         </div>
         <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">

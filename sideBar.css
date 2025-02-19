@@ -14,3 +14,13 @@ background: #f0f0f0;
 background-color: #ccc;
 border-radius: 4px;
 }
+
+/* image view */
+/* .form-container {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+}
+.image-preview {
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: cover;
+} */

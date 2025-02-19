@@ -2,6 +2,12 @@
 include 'auth.php';
 include '../db_conn.php';
 
+// Check if the user is logged in and is an Admin
+if (!isset($_SESSION['user_id']) || ($_SESSION['userrole_id'] != 1 && $_SESSION['userrole_id'] != 2 && $_SESSION['userrole_id'] != 4)) {
+    header('Location: ../dashboard.php'); // Redirect to dashboard if not Admin
+    exit();
+}
+
 $employee_id = isset($_GET['employee_id']) ? (int)$_GET['employee_id'] : 0;
 
 if ($employee_id <= 0) {
@@ -92,6 +98,10 @@ if (isset($_POST['confirm_deductions_btn']) && isset($_POST['dedTotal'])) {
 
     if (empty($errorMessages)) {
         $successMessage = "Deductions confirmed successfully, with previous entries cleared!";
+
+        // Redirect to profile.php with employee_id
+        header("Location: ../profile.php?employee_id=$employee_id");
+        exit();
     }
 }
 
@@ -183,7 +193,7 @@ $total_deduction_stmt->close();
 <body class="bg-blue-50 h-screen flex overflow-hidden">
     <!-- Sidebar (fixed) -->
     <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
-        <?php include 'sideBar.php'; ?>
+        <?php include '../sideBar.php'; ?>
     </header>
 
     <!-- Main Content Area -->
@@ -191,7 +201,7 @@ $total_deduction_stmt->close();
         <!-- Top Bar (fixed) -->
         <div class="w-full">
             <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
-                <?php include 'topBar.php'; ?>
+                <?php include '../topBar.php'; ?>
             </aside>
          </div>
 
@@ -303,8 +313,6 @@ $total_deduction_stmt->close();
 
                     <button type="submit" class="w-full bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition duration-200 ease-in-out">Select Deductions</button>
                 </form>
-
-                <h2 class="text-2xl font-semibold mt-8 mb-4 text-gray-800">Total Deduction: <?php echo htmlspecialchars($total_deduction); ?></h2>
             </div>
          </main>
     </div>

@@ -2,6 +2,34 @@
 include 'view.php'; 
 include 'db_conn.php';
 
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
+
+// Fetch user details
+$user_id = $_SESSION['user_id'];
+$query = "SELECT user.name, user.userrole_id, user.employee_id  FROM user WHERE user.id = ?";
+
+if ($stmt = $conn->prepare($query)) {
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    $stmt->close();
+}
+
+// Determine profile page
+$settings = "#";
+if ($user['userrole_id'] == 1) {
+    $settings = "users/settings.php";
+} elseif ($user['userrole_id'] == 2) {
+    $settings = "users/settings.php";
+} elseif ($user['userrole_id'] == 3 || $user['userrole_id'] == 4) {
+    $settings = "user.php";
+}
+
 // Initialize variables
 $employee_id = $_GET['employee_id'] ?? null; // Get employee_id from URL
 $employee = null;
@@ -176,14 +204,13 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
 
                 <!-- User Profile Dropdown -->
                 <div class="relative">
-                    <button id="profileMenuButton" class="flex items-center space-x-2 focus:outline-none">
-                        <img src="profile.png" alt="User" class="w-8 h-8 rounded-full">
-                        <span class="text-black">User</span>
+                    <button id="profileMenuButton" class="flex items-center space-x-2 focus:outline-none py-3 px-6 rounded-full shadow-inner bg-blue-300">
+                        <span class="text-black font-semibold"><?php echo htmlspecialchars($user['name']); ?></span>
                     </button>
                     <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 text-gray-800 z-20">
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-200">Profile</a>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-200">Settings</a>
-                        <a href="#" class="block px-4 py-2 text-red-600 hover:bg-gray-200">Logout</a>
+                        <a href="/payroll/profile.php?employee_id=<?php echo $user['employee_id']; ?>" class="block px-4 py-2 hover:bg-gray-200">Profiles</a>
+                        <a href="/payroll/<?php echo $settings; ?>" class="block px-4 py-2 hover:bg-gray-200">Settings</a>
+                        <a href="/payroll/logout.php" class="block px-4 py-2 text-red-600 hover:bg-gray-200">Logout</a>
                     </div>
                 </div>
             </div>

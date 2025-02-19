@@ -85,7 +85,7 @@ $conn->close();
 <body class="bg-blue-50 h-screen flex overflow-hidden">
     <!-- Sidebar (fixed) -->
     <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
-        <?php include 'sideBar.php'; ?>
+        <?php include '../sideBar.php'; ?>
     </header>
 
     <div class="flex flex-col flex-grow ml-64">
@@ -100,7 +100,7 @@ $conn->close();
             <section class="flex justify-end items-center gap-4">
                 <a href="../profile.php?employee_id=2" class="text-blue-600 hover:underline text-lg font-bold">Profile </a> //
                 <a href="userShow.php" class="text-blue-600 hover:underline text-lg font-bold">Users</a> //
-                <a href="#" class="text-blue-600 hover:underline text-lg font-bold">Employee</a>
+                <a href="empReg.php" class="text-blue-600 hover:underline text-lg font-bold">Employee</a>
             </section>
             <!-- Employees without User Account Table -->
             <section>

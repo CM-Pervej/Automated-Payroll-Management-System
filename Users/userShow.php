@@ -1,5 +1,12 @@
 <?php
 include '../db_conn.php';
+session_start();
+
+// Check if the user is logged in and is an Admin
+if (!isset($_SESSION['user_id']) || ($_SESSION['userrole_id'] != 1 && $_SESSION['userrole_id'] != 2)) {
+    header('Location: ../dashboard.php'); // Redirect to dashboard if not Admin
+    exit();
+}
 
 // Fetch all roles for selection
 $roleQuery = "SELECT * FROM userRole";
@@ -88,13 +95,13 @@ $conn->close();
 <body class="bg-blue-50 h-screen flex overflow-hidden">
     <!-- Sidebar (fixed) -->
     <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
-        <?php include 'sideBar.php'; ?>
+        <?php include '../sideBar.php'; ?>
     </header>
     <div class="flex flex-col flex-grow ml-64">
         <!-- Top Bar (fixed) -->
         <div class="w-full">
             <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
-                <?php include 'topBar.php'; ?>
+                <?php include '../topBar.php'; ?>
             </aside>
         </div>
         <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">

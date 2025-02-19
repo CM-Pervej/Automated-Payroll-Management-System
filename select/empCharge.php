@@ -133,6 +133,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("iis", $empAddSalary_id, $addDuty_id, $designation);
             $stmt->execute();
         }
+
+        // Redirect to profile.php with employee_id as a URL parameter
+        header("Location: ../profile.php?employee_id=" . $employee_id);
+        exit();
     } else {
         echo "Error inserting into empAddSalary: " . $stmt->error;
     }
@@ -167,51 +171,72 @@ if ($existingTelephoneResult->num_rows > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Designation and Allowances</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/8e69038194.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="sideBar.css">
 </head>
-<body class="bg-gray-100 py-10">
-    <div class="max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <h2 class="text-2xl font-bold text-center mb-6">Select Designation and Allowances</h2>
+<body class="bg-blue-50 h-screen flex overflow-hidden">
+    <!-- Sidebar (fixed) -->
+    <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
+        <?php include '../sideBar.php'; ?>
+    </header>
 
-        <form action="" method="POST" class="space-y-4">
-            <table class="w-full border-collapse">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border px-4 py-2">Designation</th>
-                        <th class="border px-4 py-2">Additional Salary</th>
-                        <th class="border px-4 py-2">Telephone Allowance</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($additionalSalaries as $id => $data): ?>
-                        <tr class="bg-white">
-                            <td class="border px-4 py-2">
-                                <input type="checkbox" name="designation[<?php echo $id; ?>]" value="<?php echo $data['designation']; ?>" id="designation<?php echo $id; ?>"
-                                <?php echo (isset($selectedDesignations[$id]) ? 'checked' : ''); ?>>
-                                <input type="hidden" name="addDuty_id[<?php echo $id; ?>]" value="<?php echo $id; ?>">
-                                <label for="designation<?php echo $id; ?>"><?php echo $data['designation']; ?></label>
-                            </td>
-                            <td class="border px-4 py-2"><?php echo $data['addSalary']; ?></td>
-                            <td class="border px-4 py-2">
-                                <div class="border px-4 py-2">
-                                    <?php foreach ($data['telephones'] as $telephone): ?>
-                                        <div>
-                                            <input type="radio" name="telephoneAllw" value="<?php echo $telephone['id']; ?>" id="telephoneAllw<?php echo $telephone['id']; ?>" 
-                                            <?php echo ($existingTelephoneAllw_id == $telephone['id'] ? 'checked' : ''); ?>>
-                                            <label for="telephoneAllw<?php echo $telephone['id']; ?>"><?php echo number_format($telephone['value'], 2); ?></label>
+    <!-- Main Content Area -->
+    <div class="flex flex-col flex-grow ml-64">
+        <!-- Top Bar (fixed) -->
+        <div class="w-full">
+            <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
+                <?php include '../topBar.php'; ?>
+            </aside>
+        </div>
+
+        <!-- Content Section -->
+        <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">
+            <div class="max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-lg border">
+                <h2 class="text-2xl font-bold text-center mb-6">Select Designation and Allowances</h2>
+
+                <form action="" method="POST" class="space-y-4">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="border px-4 py-2">Designation</th>
+                                <th class="border px-4 py-2">Additional Salary</th>
+                                <th class="border px-4 py-2">Telephone Allowance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($additionalSalaries as $id => $data): ?>
+                                <tr class="bg-white">
+                                    <td class="border px-4 py-2">
+                                        <input type="checkbox" name="designation[<?php echo $id; ?>]" value="<?php echo $data['designation']; ?>" id="designation<?php echo $id; ?>"
+                                        <?php echo (isset($selectedDesignations[$id]) ? 'checked' : ''); ?>>
+                                        <input type="hidden" name="addDuty_id[<?php echo $id; ?>]" value="<?php echo $id; ?>">
+                                        <label for="designation<?php echo $id; ?>"><?php echo $data['designation']; ?></label>
+                                    </td>
+                                    <td class="border px-4 py-2"><?php echo $data['addSalary']; ?></td>
+                                    <td class="border px-4 py-2">
+                                        <div class="border px-4 py-2">
+                                            <?php foreach ($data['telephones'] as $telephone): ?>
+                                                <div>
+                                                    <input type="radio" name="telephoneAllw" value="<?php echo $telephone['id']; ?>" id="telephoneAllw<?php echo $telephone['id']; ?>" 
+                                                    <?php echo ($existingTelephoneAllw_id == $telephone['id'] ? 'checked' : ''); ?>>
+                                                    <label for="telephoneAllw<?php echo $telephone['id']; ?>"><?php echo number_format($telephone['value'], 2); ?></label>
+                                                </div>
+                                            <?php endforeach; ?>
                                         </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
 
-            <div class="text-center">
-                <button type="submit" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded hover:bg-blue-700">Submit</button>
+                    <div class="text-center">
+                        <button type="submit" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded hover:bg-blue-700">Submit</button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </main>
     </div>
 </body>
 </html>

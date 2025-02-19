@@ -109,7 +109,7 @@ if ($user['userrole_id'] == 1) {
             
             if (query.length > 0) {
                 const xhr = new XMLHttpRequest();
-                xhr.open("GET", "get_suggestions.php?query=" + encodeURIComponent(query), true);
+                xhr.open("GET", "/payroll/get_suggestions.php?query=" + encodeURIComponent(query), true);
                 xhr.onload = function() {
                     if (this.status === 200) {
                         const suggestions = JSON.parse(this.responseText);
