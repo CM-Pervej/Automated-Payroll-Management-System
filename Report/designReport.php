@@ -117,7 +117,7 @@ $conn->close();
             </div>
             <article class="px-14 text-xl">
                 <p class="font-bold mb-20">বিষয়ঃ <?php echo date('F, Y', strtotime("{$passed_year}-{$passed_month}-01")); ?> মাসের বেতন ও ভাতার বিল প্রস্তুত প্রসঙ্গে।</p>
-                <p class="leading-loose">
+                <p class="leading-loose text-justify">
                     উপর্যুক্ত বিষয়ের আলোকে আপনার বিভাগ/দপ্তরের <?php echo date('F, Y', strtotime("{$passed_year}-{$passed_month}-01")); ?> মাসের বেতন ও ভাতার বিল টি অন্ত্যন্ত সহজভাবে প্রস্তুত করা হলো। 
                     বিল গুলিতে স্বাক্ষর দিয়ে অনুমোদন হিসাবে দপ্তরে প্রেরণের জন্য এবং কোন প্রকার ভুল পরিলক্ষিত হলে সেটিও সংশোধন করে জমা দেওয়ার জন্য অনুরোধ করা হলো। 
                     যে সকল শিক্ষক ও কর্মকর্তাগণ তাদের টি.আই.এন হিসাব দপ্তরে প্রদান করেননি, তাদেরকে চলতি মাসের বেতন ও ভাতার বিলের সাথে টি.আই.এন এর কপি জমা দেওয়ার জন্য অনুরোধ করা হলো।
@@ -129,7 +129,7 @@ $conn->close();
             <p class="error"><?php echo $error_message; ?></p>
         <?php else: ?>
         <!-- Loop through each department and display payroll for employees in that department -->
-        <?php foreach ($employees as $designation => $departments): ?>
+        <?php ksort($employees); foreach ($employees as $designation => $departments): ?>
     <section class="page-container pt-16">
         <section class="flex items-center relative">
             <figure class="w-auto pl-10 absolute">

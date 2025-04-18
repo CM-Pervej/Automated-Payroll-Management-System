@@ -182,9 +182,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <label for="gender" class="w-1/3 text-lg font-medium text-gray-800">Gender</label>
                                     <select name="gender" id="gender" required 
                                             class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                                        <option class="text-black" value="Male" <?php echo ($employee['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
-                                        <option value="Female" <?php echo ($employee['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
-                                        <option value="Other" <?php echo ($employee['gender'] == 'Other') ? 'selected' : ''; ?>>Other</option>
+                                        <option class="text-black" value="1" <?php echo ($employee['gender'] == '1') ? 'selected' : ''; ?>>Male</option>
+                                        <option value="2" <?php echo ($employee['gender'] == '2') ? 'selected' : ''; ?>>Female</option>
+                                        <option value="0" <?php echo ($employee['gender'] == '0') ? 'selected' : ''; ?>>Other</option>
                                     </select>
                                 </div>
 
@@ -206,8 +206,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <label for="empStatus" class="w-1/3 text-lg font-medium text-gray-800">Employee Status</label>
                                     <select name="empStatus" id="empStatus" required 
                                             class="select select-bordered w-2/3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                        <option value="Active" <?php echo ($employee['empStatus'] == 'Active') ? 'selected' : ''; ?>>Active</option>
-                                        <option value="In Active" <?php echo ($employee['empStatus'] == 'In Active') ? 'selected' : ''; ?>>In Active</option>
+                                        <option value="1" <?php echo ($employee['empStatus'] == '1') ? 'selected' : ''; ?>>Active</option>
+                                        <option value="2" <?php echo ($employee['empStatus'] == '2') ? 'selected' : ''; ?>>In Active</option>
                                     </select>
                                 </div>
                                 <div class="<?php echo ($userrole_id == 3) ? 'hidden' : 'flex items-center space-x-4'; ?>">

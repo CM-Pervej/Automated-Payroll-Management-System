@@ -36,13 +36,14 @@ if (isset($_POST['approve_employee'])) {
         // Re-enable foreign key checks
         $conn->query("SET FOREIGN_KEY_CHECKS = 1");
     } else {
-        // Update the employee's approve status in the employee table
-        $updateApproveStatusQuery = "UPDATE employee SET approve = ? WHERE id = ?";
+        // Update the employee's approve status and empStatus in the employee table
+        $updateApproveStatusQuery = "UPDATE employee SET approve = ?, empStatus = ? WHERE id = ?";
         $stmt = $conn->prepare($updateApproveStatusQuery);
-        $stmt->bind_param("ii", $approval_status, $employee_id);
+        $empStatus = ($approval_status === '1') ? 1 : 0; // Set empStatus as 1 (active) when approved, otherwise 0
+        $stmt->bind_param("iii", $approval_status, $empStatus, $employee_id);
         $stmt->execute();
 
-        // Update the user's status in the user table
+        // Update the user's approval status in the user table
         $updateUserStatusQuery = "UPDATE user SET status = ? WHERE employee_id = ?";
         $stmt = $conn->prepare($updateUserStatusQuery);
         $stmt->bind_param("ii", $approval_status, $employee_id);
@@ -98,7 +99,7 @@ $conn->close();
 
         <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">
             <section class="flex justify-end items-center gap-4">
-                <a href="../profile.php?employee_id=2" class="text-blue-600 hover:underline text-lg font-bold">Profile </a> //
+                <a href="setting.php"  class="text-blue-600 hover:underline text-lg font-bold">Settings </a> //
                 <a href="userShow.php" class="text-blue-600 hover:underline text-lg font-bold">Users</a> //
                 <a href="empReg.php" class="text-blue-600 hover:underline text-lg font-bold">Employee</a>
             </section>

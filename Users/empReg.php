@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($errorMessages)) {
-        $gender_code = $gender === 'Male' ? 1 : ($gender === 'Female' ? 2 : 3);
+        $gender_code = $gender === '1' ? 1 : ($gender === '2' ? 2 : ($gender === '0' ? 3 : null));
         $birth_year = date('y', strtotime($date_of_birth));
         $employee_count_result = $conn->query("SELECT COUNT(*) AS count FROM employee");
         $employee_count_row = $employee_count_result->fetch_assoc();
@@ -166,9 +166,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <select name="gender" id="gender" required 
                                                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
                                             <option value="" disabled selected class="bg-gray-300">Select Gender</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                            <option value="Other">Other</option>
+                                            <option value="1">Male</option>
+                                            <option value="2">Female</option>
+                                            <option value="0">Other</option>
                                         </select>
                                     </td>
                                 </tr>

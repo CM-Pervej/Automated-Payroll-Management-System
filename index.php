@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Check if the user exists and has approval
+    // Check if the user exists, has approval, and status is 1
     $query = "SELECT user.*, employee.approve 
               FROM user 
               JOIN employee ON user.employee_id = employee.id 
@@ -23,6 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
 
+            // Check if the status is 1 (active)
+            if ($user['status'] != 1) {
+                echo "<script>alert('You are blocked. Please contact with admin.'); window.location.href='index.php';</script>";
+                exit();
+            }
+
+            // Check if the user is approved
             if ($user['approve'] == 0) {
                 echo "<script>alert('Your account is not approved yet or dismissed.'); window.location.href='index.php';</script>";
                 exit();
@@ -89,7 +96,12 @@ $conn->close();
                             </div>
                             <div class="space-y-2 text-left">
                                 <label class="mb-5 text-sm font-medium text-gray-700 tracking-wide"> Password </label>
-                                <input class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400" type="password" name="password" placeholder="Enter your password" required>
+                                <div class="relative">
+                                    <input id="passwordField" class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400" type="password" name="password" placeholder="Enter your password" required>
+                                    <button type="button" id="togglePassword" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600">
+                                        <i id="eyeIcon" class="fa-solid fa-eye"></i> <!-- Icon to show/hide password -->
+                                    </button>
+                                </div>
                             </div>
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
@@ -203,6 +215,7 @@ $conn->close();
             </button>
         </div>
 
+    </header>
         <script>
             // Show the login form when the "Sign In" button is clicked
             document.getElementById('signInBtn').addEventListener('click', function () {
@@ -214,6 +227,27 @@ $conn->close();
                 document.getElementById('loginForm').classList.add('hidden');
             });
         </script>
-    </header>
+        <script>
+            // Get references to the password input field and the toggle button
+            const passwordField = document.getElementById('passwordField');
+            const togglePasswordButton = document.getElementById('togglePassword');
+            const eyeIcon = document.getElementById('eyeIcon');
+
+            // Add event listener to toggle password visibility
+            togglePasswordButton.addEventListener('click', function() {
+                // Toggle the input type between 'password' and 'text'
+                const type = passwordField.type === 'password' ? 'text' : 'password';
+                passwordField.type = type;
+
+                // Change the icon based on the visibility of the password
+                if (type === 'password') {
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                } else {
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                }
+            });
+        </script>
 </body>
 </html>

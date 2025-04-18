@@ -57,7 +57,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 <a href="/payroll/dashboard.php" class="sidebar-link <?php echo ($currentPage == 'index.php') ? 'sidebar-active-link' : ''; ?>"><i class="fas fa-home mr-2"></i><span>Dashboard</span></a>
                 <a href="/payroll/employee.php" class="sidebar-link <?php echo ($currentPage == 'employee.php') ? 'sidebar-active-link' : ''; ?>"><i class="fas fa-users mr-2"></i><span>Employee</span></a>  
                 <a href="/payroll/payroll.php" class="sidebar-link <?php echo ($currentPage == 'payroll.php') ? 'sidebar-active-link' : ''; ?>"><i class="fas fa-file-invoice-dollar mr-2"></i><span>Payroll</span></a>
-                <a href="/payroll/report.php" class="sidebar-link <?php echo ($currentPage == 'report.php') ? 'sidebar-active-link' : ''; ?>"><i class="fas fa-file-invoice-dollar mr-2"></i><span>Report</span></a>
+                <a href="/payroll/report/report.php" class="sidebar-link <?php echo ($currentPage == 'report.php') ? 'sidebar-active-link' : ''; ?>"><i class="fas fa-file-invoice-dollar mr-2"></i><span>Report</span></a>
             </nav>
         </div>
         <nav>

@@ -216,7 +216,7 @@ if ($existingTelephoneResult->num_rows > 0) {
                                     </td>
                                     <td class="border px-4 py-2"><?php echo $data['addSalary']; ?></td>
                                     <td class="border px-4 py-2">
-                                        <div class="border px-4 py-2">
+                                        <div class="border px-4 py-2 flex justify-between">
                                             <?php foreach ($data['telephones'] as $telephone): ?>
                                                 <div>
                                                     <input type="radio" name="telephoneAllw" value="<?php echo $telephone['id']; ?>" id="telephoneAllw<?php echo $telephone['id']; ?>" 

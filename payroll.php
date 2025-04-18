@@ -24,12 +24,12 @@ while ($row = $deductionList_result->fetch_assoc()) {
 $deductionList_stmt->close();
 
 // Fetch all employees
-$employees_stmt = $conn->prepare(" SELECT e.id AS employee_id, e.employeeNo, e.name, e.contactNo, e.email, e.empStatus, e.no_of_increment, e.basic, e.account_number, e.e_tin, e.joining_date, e.image, e.approve, d.designation AS primary_designation, dept.department_name, g.grade, g.scale
+$employees_stmt = $conn->prepare(" SELECT e.id AS employee_id, e.employeeNo, e.name, e.gender, e.contactNo, e.email, e.empStatus, e.no_of_increment, e.basic, e.account_number, e.e_tin, e.joining_date, e.image, e.approve, d.designation AS primary_designation, dept.department_name, g.grade, g.scale
                                                 FROM employee e
                                                 JOIN designations d ON e.designation_id = d.id
                                                 JOIN departments dept ON e.department_id = dept.id
                                                 JOIN grade g ON e.grade_id = g.id
-                                                WHERE e.approve != 0
+                                                WHERE e.approve != 0 AND e.empStatus = 1
                                                 ORDER BY 
                                                 dept.department_name ASC,
                                                 g.grade ASC,
@@ -198,7 +198,7 @@ while ($employee = $employees_result->fetch_assoc()) {
 
             // Now prepare the SQL statement for insertion
             $sql = "INSERT INTO payroll (
-                employee_id, employeeNo, name, contactNo, email, empStatus, designation, departments, grade, 
+                employee_id, employeeNo, name, gender, contactNo, email, empStatus, designation, departments, grade, 
                 increment, scale, basic, account_number, e_tin, chargeAllw, telephoneAllwance, AdditionalDesignation,
                 dearnessAllw, houseAllw, medicalAllw, educationAllw, festivalAllw, researchAllw, newBdYrAllw, recreationAllw, otherAllw, 
                 gpf, gpfInstallment, houseDed, benevolentFund, insurance, electricity, hrdExtra, clubSubscription, 
@@ -206,14 +206,14 @@ while ($employee = $employees_result->fetch_assoc()) {
                 guestHouseRent, houseLoanInstallment_1, houseLoanInstallment_2, houseLoanInstallment_3, salaryAdjustment, 
                 revenue, otherDed, month, year
             ) VALUES (
-                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
             )";
 
             // Now bind the parameters, ensuring everything is passed as variables
             $stmt = $conn->prepare($sql);
             $stmt->bind_param(
-                "isssssssssddddddsddddsssssssssssssssssssiiiiiiiiii",
-                $employee['employee_id'], $employee['employeeNo'], $employee['name'], $employee['contactNo'], 
+                "ississsssssddddddsddddsssssssssssssssssssiiiiiiiiii",
+                $employee['employee_id'], $employee['employeeNo'], $employee['name'], $employee['gender'], $employee['contactNo'], 
                 $employee['email'], $employee['empStatus'], $employee['primary_designation'], $employee['department_name'], 
                 $employee['grade'], $employee['no_of_increment'], $employee['scale'], $employee['basic'], 
                 $employee['account_number'], $employee['e_tin'], $chargeAllw, $telephoneAllwance, $additionalDesignationsString, 
@@ -284,6 +284,7 @@ $conn->close();
                                     <th id="th1" scope="col" class="p-3 text-left border border-gray-300">Image</th>
                                     <th id="th2" scope="col" class="p-3 text-left border border-gray-300">Employee No</th>
                                     <th id="th3" scope="col" class="p-3 text-left border border-gray-300">Name</th>
+                                    <th id="th3" scope="col" class="p-3 text-left border border-gray-300">Gender</th>
                                     <th id="th4" scope="col" class="p-3 text-left border border-gray-300">Primary Designation</th>
                                     <th id="th5" scope="col" class="p-3 text-left border border-gray-300">Department</th>
                                     <th id="th6" scope="col" class="p-3 text-left border border-gray-300">Grade</th>
@@ -341,6 +342,20 @@ $conn->close();
                                             <a href="profile.php?employee_id=<?php echo $data['employee']['employee_id']; ?>" class="text-blue-600 font-semibold whitespace-nowrap hover:underline">
                                                 <?php echo $data['employee']['name']; ?>
                                             </a>
+                                        </td>
+                                        <td headers="th6" class="p-3 text-left border">
+                                            <?php 
+                                                $gender = $data['employee']['gender'];
+                                                if ($gender == 1) {
+                                                    echo "Male";
+                                                } elseif ($gender == 2) {
+                                                    echo "Female";
+                                                } elseif ($gender == 0) {
+                                                    echo "Other";
+                                                } else {
+                                                    echo "Not specified"; 
+                                                }
+                                            ?>
                                         </td>
                                         <td headers="th4" class="p-3 text-left border whitespace-nowrap"><?php echo $data['employee']['primary_designation']; ?></td>
                                         <td headers="th5" class="p-3 text-left border whitespace-nowrap"><?php echo $data['employee']['department_name']; ?></td>

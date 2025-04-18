@@ -117,7 +117,7 @@ $conn->close();
             </div>
             <article class="px-14 text-xl">
                 <p class="font-bold mb-20">বিষয়ঃ <?php echo date('F, Y', strtotime("{$passed_year}-{$passed_month}-01")); ?> মাসের বেতন ও ভাতার বিল প্রস্তুত প্রসঙ্গে।</p>
-                <p class="leading-loose">
+                <p class="leading-loose text-justify">
                     উপর্যুক্ত বিষয়ের আলোকে আপনার বিভাগ/দপ্তরের <?php echo date('F, Y', strtotime("{$passed_year}-{$passed_month}-01")); ?> মাসের বেতন ও ভাতার বিল টি অন্ত্যন্ত সহজভাবে প্রস্তুত করা হলো। 
                     বিল গুলিতে স্বাক্ষর দিয়ে অনুমোদন হিসাবে দপ্তরে প্রেরণের জন্য এবং কোন প্রকার ভুল পরিলক্ষিত হলে সেটিও সংশোধন করে জমা দেওয়ার জন্য অনুরোধ করা হলো। 
                     যে সকল শিক্ষক ও কর্মকর্তাগণ তাদের টি.আই.এন হিসাব দপ্তরে প্রদান করেননি, তাদেরকে চলতি মাসের বেতন ও ভাতার বিলের সাথে টি.আই.এন এর কপি জমা দেওয়ার জন্য অনুরোধ করা হলো।
@@ -160,7 +160,7 @@ $conn->close();
                     <p>Established Year:</p> <p>Location:</p> <p>Total Employee:</p>
                 </div>
                 <div>
-                    <p>2007</p> <p>2nd Floor, Academic Building</p> <p>30</p>
+                    <p>2007</p> <p>2nd Floor, Academic Building</p> <p>20</p>
                 </div>
             </article>
         </section>

@@ -10,7 +10,7 @@ $result = $conn->query("SELECT e.id, e.employeeNo, e.name, e.empStatus, e.grade_
     LEFT JOIN designations des ON e.designation_id = des.id
     LEFT JOIN grade g ON e.grade_id = g.id 
     LEFT JOIN checkEmployee ce ON e.id = ce.employee_id
-    WHERE ce.employee_id IS NULL AND e.approve != 0
+    WHERE ce.employee_id IS NULL AND e.approve != 0 AND e.empStatus = 1
 ");
 
 if ($result) {
@@ -101,7 +101,7 @@ $conn->close();
                                     <td class="px-4 py-2"><?php echo htmlspecialchars($employee['grade']); ?></td>
                                     <td class="px-4 py-2"><?php echo htmlspecialchars($employee['designation']); ?></td>
                                     <td class="px-4 py-2"><?php echo htmlspecialchars($employee['department_name']); ?></td>
-                                    <td class="px-4 py-2"><?php echo htmlspecialchars($employee['empStatus']); ?></td>
+                                    <td class="px-4 py-2"><?php  echo ($employee['empStatus'] == 1) ? 'Active' : 'Inactive'; ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>

@@ -10,7 +10,7 @@ $result = $conn->query("SELECT e.id, e.employeeNo, e.name, e.empStatus, e.grade_
     LEFT JOIN designations des ON e.designation_id = des.id
     LEFT JOIN grade g ON e.grade_id = g.id 
     INNER JOIN checkEmployee ce ON e.id = ce.employee_id
-    WHERE e.approve != 0
+    WHERE e.approve != 0 AND e.empStatus = 1
 ");
 
 if ($result) {
@@ -150,7 +150,7 @@ $conn->close();
                                         <td class="px-4 py-2"><?php echo htmlspecialchars($employee['grade']); ?></td>
                                         <td class="px-4 py-2"><?php echo htmlspecialchars($employee['designation']); ?></td>
                                         <td class="px-4 py-2"><?php echo htmlspecialchars($employee['department_name']); ?></td>
-                                        <td class="px-4 py-2"><?php echo htmlspecialchars($employee['empStatus']); ?></td>
+                                        <td class="px-4 py-2"><?php  echo ($employee['empStatus'] == 1) ? 'Active' : 'Inactive'; ?></td>
                                         <td class="px-4 py-2">
                                             <!-- Delete Button -->
                                             <a href="?delete_id=<?php echo $employee['id']; ?>" class="text-red-600 hover:underline" style="<?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'pointer-events: none; color: gray; text-decoration: none;' : ''; ?>" title="Only Admin and HR can access this page">Delete</a>

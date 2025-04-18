@@ -7,8 +7,9 @@ CREATE TABLE `user` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `status` TINYINT(1) NOT NULL DEFAULT 2,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (employee_id) REFERENCES employee(id) ON DELETE CASCADE
+) 
 
 -- Insert data with status column
 INSERT INTO `user` (`id`, `employee_id`, `employeeNo`, `name`, `userrole_id`, `email`, `password`, `status`) VALUES

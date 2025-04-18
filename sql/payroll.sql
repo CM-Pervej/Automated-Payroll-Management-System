@@ -3,6 +3,7 @@ CREATE TABLE payroll (
     employee_id INT NOT NULL,
     employeeNo VARCHAR(50),
     name VARCHAR(100),
+    gender VARCHAR(255),
     contactNo VARCHAR(20),
     email VARCHAR(100),
     empStatus VARCHAR(20),

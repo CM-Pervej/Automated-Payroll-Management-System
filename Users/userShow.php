@@ -1,86 +1,100 @@
 <?php
-include '../db_conn.php';
-session_start();
+    include '../db_conn.php';
+    session_start();
 
-// Check if the user is logged in and is an Admin
-if (!isset($_SESSION['user_id']) || ($_SESSION['userrole_id'] != 1 && $_SESSION['userrole_id'] != 2)) {
-    header('Location: ../dashboard.php'); // Redirect to dashboard if not Admin
-    exit();
-}
-
-// Fetch all roles for selection
-$roleQuery = "SELECT * FROM userRole";
-$roleResult = $conn->query($roleQuery);
-$roles = [];
-
-if ($roleResult->num_rows > 0) {
-    while ($roleRow = $roleResult->fetch_assoc()) {
-        $roles[] = $roleRow;
-    }
-}
-
-// Handle the update request
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
-    $id = $_POST['id'];
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $userrole_id = $_POST['userrole_id'];
-    $password = $_POST['password'];
-
-    // Check if the status is set in the POST request, else default to null or current value
-    $status = isset($_POST['status']) ? $_POST['status'] : null;
-
-    if (!empty($password)) {
-        // Hash the new password
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $query = "UPDATE user SET name = ?, email = ?, userrole_id = ?, password = ?, status = ? WHERE id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssisis", $name, $email, $userrole_id, $hashedPassword, $status, $id);
-    } else {
-        // Update without changing password
-        $query = "UPDATE user SET name = ?, email = ?, userrole_id = ?, status = ? WHERE id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssisi", $name, $email, $userrole_id, $status, $id);
+    // Check if the user is logged in and has the correct role (1 = Admin, 2 = HR)
+    if (!isset($_SESSION['user_id']) || ($_SESSION['userrole_id'] != 1 && $_SESSION['userrole_id'] != 2)) {
+        header('Location: ../dashboard.php'); // Redirect to dashboard if not Admin or HR
+        exit();
     }
 
-    if ($stmt->execute()) {
-        echo "<script>alert('User updated successfully!');</script>";
-    } else {
-        echo "<script>alert('Error updating user');</script>";
+    // Check if the user is HR (userrole_id 2)
+    $isHR = ($_SESSION['userrole_id'] == 2);
+    
+    // Fetch all roles for selection
+    $roleQuery = "SELECT * FROM userRole";
+    $roleResult = $conn->query($roleQuery);
+    $roles = [];
+
+    if ($roleResult->num_rows > 0) {
+        while ($roleRow = $roleResult->fetch_assoc()) {
+            $roles[] = $roleRow;
+        }
     }
-}
 
-// Fetch active users (status = 1)
-$activeQuery = "SELECT u.id, u.name, u.email, u.userrole_id, u.employeeNo, u.status, r.role 
-                FROM user u
-                JOIN userRole r ON u.userrole_id = r.id
-                WHERE u.status = 1
-                ORDER BY u.userrole_id ASC";
-$activeResult = $conn->query($activeQuery);
-$activeUsers = [];
+    // Handle the update request
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $userrole_id = $_POST['userrole_id'];
+        $password = isset($_POST['password']) ? $_POST['password'] : ''; // Check if password is set
 
-if ($activeResult->num_rows > 0) {
-    while ($row = $activeResult->fetch_assoc()) {
-        $activeUsers[] = $row;
+        // Check if the status is set in the POST request, else default to null or current value
+        $status = isset($_POST['status']) ? $_POST['status'] : null;
+
+        // If the user is HR (userrole_id 2), they cannot update users with role 1 or 2
+        if ($isHR && ($userrole_id == 1 || $userrole_id == 2)) {
+            $_SESSION['error'] = 'You cannot assign role to Admin (userrole_id = 1) or HR (userrole_id = 2).';
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit(); // Redirect back to the form
+        }
+
+        // If password is provided, hash and update, otherwise skip password update
+        if (!empty($password)) {
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $query = "UPDATE user SET name = ?, email = ?, userrole_id = ?, password = ?, status = ? WHERE id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("ssisis", $name, $email, $userrole_id, $hashedPassword, $status, $id);
+        } else {
+            // Skip password update if not provided
+            $query = "UPDATE user SET name = ?, email = ?, userrole_id = ?, status = ? WHERE id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("ssisi", $name, $email, $userrole_id, $status, $id);
+        }
+
+        if ($stmt->execute()) {
+            $_SESSION['success'] = 'User updated successfully!';
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit(); // Redirect to show success
+        } else {
+            $_SESSION['error'] = 'Error updating user';
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit(); // Redirect back to the form in case of failure
+        }
     }
-}
 
-// Fetch inactive users (status = 0)
-$inactiveQuery = "SELECT u.id, u.name, u.email, u.userrole_id, u.employeeNo, u.status, r.role 
-                  FROM user u
-                  JOIN userRole r ON u.userrole_id = r.id
-                  WHERE u.status = 0
-                  ORDER BY u.userrole_id ASC";
-$inactiveResult = $conn->query($inactiveQuery);
-$inactiveUsers = [];
+    // Fetch active users (status = 1)
+    $activeQuery = "SELECT u.id, u.name, u.email, u.userrole_id, u.employeeNo, u.status, r.role 
+                    FROM user u
+                    JOIN userRole r ON u.userrole_id = r.id
+                    WHERE u.status = 1
+                    ORDER BY u.userrole_id ASC";
+    $activeResult = $conn->query($activeQuery);
+    $activeUsers = [];
 
-if ($inactiveResult->num_rows > 0) {
-    while ($row = $inactiveResult->fetch_assoc()) {
-        $inactiveUsers[] = $row;
+    if ($activeResult->num_rows > 0) {
+        while ($row = $activeResult->fetch_assoc()) {
+            $activeUsers[] = $row;
+        }
     }
-}
 
-$conn->close();
+    // Fetch inactive users (status = 0)
+    $inactiveQuery = "SELECT u.id, u.name, u.email, u.userrole_id, u.employeeNo, u.status, r.role 
+                      FROM user u
+                      JOIN userRole r ON u.userrole_id = r.id
+                      WHERE u.status = 0
+                      ORDER BY u.userrole_id ASC";
+    $inactiveResult = $conn->query($inactiveQuery);
+    $inactiveUsers = [];
+
+    if ($inactiveResult->num_rows > 0) {
+        while ($row = $inactiveResult->fetch_assoc()) {
+            $inactiveUsers[] = $row;
+        }
+    }
+
+    $conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -110,6 +124,21 @@ $conn->close();
                     <h1 class="text-3xl font-bold">User Management</h1>
                     <a href="userSet.php" class="absolute right-0 px-4 py-2 bg-blue-500 text-white rounded">ADD Users</a>
                 </div>
+
+                <!-- Display Error or Success Messages -->
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div class="bg-red-100 text-red-700 p-4 mb-4 rounded">
+                        <?php echo $_SESSION['error']; ?>
+                    </div>
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['success'])): ?>
+                    <div class="bg-green-100 text-green-700 p-4 mb-4 rounded">
+                        <?php echo $_SESSION['success']; ?>
+                    </div>
+                    <?php unset($_SESSION['success']); ?>
+                <?php endif; ?>
 
                 <!-- Active Users Section -->
                 <div class="mb-8" div id="active-section">
@@ -195,8 +224,11 @@ $conn->close();
                         <label class="block">Email:</label>
                         <input type="email" name="email" id="editEmail" class="border p-2 w-full rounded mb-2">
                         
+                        <!-- Only show password field if user role is not HR -->
+                        <?php if (!$isHR): ?>
                         <label class="block">Password:</label>
                         <input type="password" name="password" id="editPassword" class="border p-2 w-full rounded mb-2" placeholder="Leave blank to keep current password">
+                        <?php endif; ?>
                         
                         <label class="block">User Role:</label>
                         <select name="userrole_id" id="editUserRole" class="border p-2 w-full rounded mb-2">
@@ -221,37 +253,24 @@ $conn->close();
         </main>
     </div>
 
-            <script>
-                function openEditModal(user) {
-                    document.getElementById('editUserId').value = user.id;
-                    document.getElementById('editName').value = user.name;
-                    document.getElementById('editEmail').value = user.email;
-                    document.getElementById('editUserRole').value = user.userrole_id;
-                    document.getElementById('editStatus').value = user.status;
-                    document.getElementById('editModal').classList.remove('hidden');
-                }
+    <script>
+        function openEditModal(user) {
+            document.getElementById('editUserId').value = user.id;
+            document.getElementById('editName').value = user.name;
+            document.getElementById('editEmail').value = user.email;
+            document.getElementById('editUserRole').value = user.userrole_id;
+            document.getElementById('editStatus').value = user.status;
+            document.getElementById('editModal').classList.remove('hidden');
+        }
 
-                function closeEditModal() {
-                    document.getElementById('editModal').classList.add('hidden');
-                }
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
 
-                function updateStatus(userId, status) {
-                    const xhr = new XMLHttpRequest();
-                    xhr.open("POST", "update_status.php", true);
-                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState === 4 && xhr.status === 200) {
-                            alert("User status updated successfully!");
-                        }
-                    };
-                    xhr.send("id=" + userId + "&status=" + status);
-                }
-            </script>
-            <script>
-                function toggleForm() {
-                    document.getElementById('active-section').classList.toggle('hidden');
-                    document.getElementById('inactive-section').classList.toggle('hidden');
-                }
-            </script>
+        function toggleForm() {
+            document.getElementById('active-section').classList.toggle('hidden');
+            document.getElementById('inactive-section').classList.toggle('hidden');
+        }
+    </script>
 </body>
 </html>

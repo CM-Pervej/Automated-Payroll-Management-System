@@ -14,48 +14,53 @@ include '../db_conn.php';
 $passed_month = isset($_GET['month']) ? $_GET['month'] : date('m'); // Default to current month if not passed
 $passed_year = isset($_GET['year']) ? $_GET['year'] : date('Y'); // Default to current year if not passed
 
-// Prepare the SQL statement to fetch payroll data grouped by department
-$stmt = $conn->prepare("SELECT 
-    departments AS Department,
-    COUNT(employee_id) AS TotalEmployee,
-    SUM(basic) AS totalBasic,
-    SUM(
-        basic + chargeAllw + telephoneAllwance + dearnessAllw + houseAllw + medicalAllw + 
-        educationAllw + festivalAllw + researchAllw + newBdYrAllw + recreationAllw + otherAllw
-    ) AS totalAllowance,
-    SUM(
-        gpf + gpfInstallment + houseDed + benevolentFund + insurance + electricity + hrdExtra + 
-        clubSubscription + assoSubscription + transportBill + telephoneBill + pensionFund + fishBill + 
-        incomeTax + donation + guestHouseRent + houseLoanInstallment_1 + houseLoanInstallment_2 + 
-        houseLoanInstallment_3 + salaryAdjustment + revenue + otherDed
-    ) AS totalDeduction,
-    SUM(
-        (basic + chargeAllw + telephoneAllwance + dearnessAllw + houseAllw + medicalAllw + 
-        educationAllw + festivalAllw + researchAllw + newBdYrAllw + recreationAllw + otherAllw) - 
-        (gpf + gpfInstallment + houseDed + benevolentFund + insurance + electricity + hrdExtra + 
-        clubSubscription + assoSubscription + transportBill + telephoneBill + pensionFund + fishBill + 
-        incomeTax + donation + guestHouseRent + houseLoanInstallment_1 + houseLoanInstallment_2 + 
-        houseLoanInstallment_3 + salaryAdjustment + revenue + otherDed)
-    ) AS totalNetPay
-FROM payroll 
-WHERE `month` = ? AND `year` = ? 
-GROUP BY departments");
+// Prepare the SQL statement to fetch payroll data for all employees in the passed month and year
+$stmt = $conn->prepare("SELECT * FROM payroll WHERE `month` = ? AND `year` = ?");
 $stmt->bind_param("ii", $passed_month, $passed_year);
 
-$data = [];
-$totalPay = 0; // Initialize total pay variable
 if ($stmt->execute()) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $data = $result->fetch_all(MYSQLI_ASSOC);
+        $employees = [];
+        while ($row = $result->fetch_assoc()) {
+            // Calculate grossPay
+            $grossPay = array_sum([
+                $row['basic'], $row['chargeAllw'], $row['telephoneAllwance'],
+                $row['dearnessAllw'], $row['houseAllw'], $row['medicalAllw'],
+                $row['educationAllw'], $row['festivalAllw'], $row['researchAllw'],
+                $row['newBdYrAllw'], $row['recreationAllw'], $row['otherAllw']
+            ]);
 
-        // Calculate the total pay (sum of totalNetPay)
-        foreach ($data as $row) {
-            $totalPay += $row['totalNetPay'];
+            // Calculate totalDeduction
+            $totalDeduction = array_sum([
+                $row['gpf'], $row['gpfInstallment'], $row['houseDed'], $row['benevolentFund'],
+                $row['insurance'], $row['electricity'], $row['hrdExtra'],
+                $row['clubSubscription'], $row['assoSubscription'], $row['transportBill'],
+                $row['telephoneBill'], $row['pensionFund'], $row['fishBill'],
+                $row['incomeTax'], $row['donation'], $row['guestHouseRent'],
+                $row['houseLoanInstallment_1'], $row['houseLoanInstallment_2'],
+                $row['houseLoanInstallment_3'], $row['salaryAdjustment'], $row['revenue'],
+                $row['otherDed']
+            ]);
+
+            // Calculate netPay
+            $netPay = $grossPay - $totalDeduction;
+
+            // Store employee payroll data
+            $row['grossPay'] = $grossPay;
+            $row['totalDeduction'] = $totalDeduction;
+            $row['netPay'] = $netPay;
+
+            // Group by department and designation, count designations
+            $employees[$row['gender']][$row['designation']]['details'][] = $row;
+            $employees[$row['gender']][$row['designation']]['count'] = 
+                isset($employees[$row['gender']][$row['designation']]['count']) 
+                    ? $employees[$row['gender']][$row['designation']]['count'] + 1 
+                    : 1;
         }
     } else {
-        $error_message = "No payroll data found for the selected month and year.";
+        $error_message = "No payroll data found for the current month and year.";
     }
 } else {
     $error_message = "Failed to execute the query. Please try again.";
@@ -120,6 +125,11 @@ $conn->close();
             </article>
         </section>
 
+        <?php if (isset($error_message)): ?>
+            <p class="error"><?php echo $error_message; ?></p>
+        <?php else: ?>
+        <!-- Loop through each department and display payroll for employees in that department -->
+        <?php ksort($employees); foreach ($employees as $genderr => $designations): ?>
     <section class="page-container pt-16">
         <section class="flex items-center relative">
             <figure class="w-auto pl-10 absolute">
@@ -131,48 +141,69 @@ $conn->close();
         </section>
         <section class="mt-6">
             <hr class="border border-black ml-8">
-            <p class="ml-10 my-2 text-lg font-bold">Current Month: <?php echo date('F, Y', strtotime("{$passed_year}-{$passed_month}-01")); ?></p>
+            <div class="text-lg font-bold py-1 relative">
+                <p class="absolute ml-10">Current Month: <?php echo date('F, Y', strtotime("{$passed_year}-{$passed_month}-01")); ?></p>
+                <p class="text-center text-2xl">Gender Category: 
+                    <?php 
+                        // Convert numeric gender value to readable format
+                        if ($genderr == 1) {
+                            echo "Male";
+                        } elseif ($genderr == 2) {
+                            echo "Female";
+                        } elseif ($genderr == 0) {
+                            echo "Other";
+                        } else {
+                            echo "Not specified"; // Handle unexpected values
+                        }
+                    ?>
+                </p>
+            </div>
             <hr class="border border-black">
         </section>
 
         <section class="mt-5">
-        <?php if (isset($error_message)): ?>
-            <p class="text-red-500 font-bold text-center"><?php echo $error_message; ?></p>
-        <?php else: ?>
-            <table class="table-auto w-full border-collapse border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border border-gray-300 px-4 py-1 text-center whitespace-nowrap">SL</th>
-                        <th class="border border-gray-300 px-4 py-1 text-left whitespace-nowrap">Department</th>
-                        <th class="border border-gray-300 px-4 py-1 text-center whitespace-nowrap">Total Employees</th>
-                        <th class="border border-gray-300 px-4 py-1 text-right whitespace-nowrap">Total Basic</th>
-                        <th class="border border-gray-300 px-4 py-1 text-right whitespace-nowrap">Total Allowance</th>
-                        <th class="border border-gray-300 px-4 py-1 text-right whitespace-nowrap">Total Deduction</th>
-                        <th class="border border-gray-300 px-4 py-1 text-right whitespace-nowrap">Total Net Pay</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($data as $index => $row): ?>
-                        <tr class="hover:bg-gray-100 text-black">
-                            <td class="border border-gray-300 px-4 text-center whitespace-nowrap"><?php echo $index + 1; ?></td>
-                            <td class="border border-gray-300 px-4 text-left whitespace-nowrap"><?php echo htmlspecialchars($row['Department']); ?></td>
-                            <td class="border border-gray-300 px-4 text-center whitespace-nowrap"><?php echo $row['TotalEmployee']; ?></td>
-                            <td class="border border-gray-300 px-4 text-right whitespace-nowrap"><?php echo number_format($row['totalBasic'], 2); ?></td>
-                            <td class="border border-gray-300 px-4 text-right whitespace-nowrap"><?php echo number_format($row['totalAllowance'], 2); ?></td>
-                            <td class="border border-gray-300 px-4 text-right whitespace-nowrap"><?php echo number_format($row['totalDeduction'], 2); ?></td>
-                            <td class="border border-gray-300 px-4 text-right whitespace-nowrap"><?php echo number_format($row['totalNetPay'], 2); ?></td>
+            <article class="mt-5">
+                <table class="w-full border-collapse border border-black">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border border-gray-300 px-4 py-2 text-center whitespace-nowrap">SL</th> 
+                            <th class="border border-gray-300 px-4 py-2 text-left whitespace-nowrap">Designation</th> 
+                            <th class="border border-gray-300 px-4 py-2 text-center whitespace-nowrap">Count</th> 
+                            <th class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">Basic</th> 
+                            <th class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">Allowances</th> 
+                            <th class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">Deductions</th> 
+                            <th class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap">Net Pay</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                            <?php 
+                            $totalDepartmentPay = 0; 
+                            $sl = 1;
+                            foreach ($designations as $designation => $data): 
+                                $totalDesignationPay = array_sum(array_column($data['details'], 'netPay'));
+                                $totalDepartmentPay += $totalDesignationPay;
+                            ?>
+                                <tr class="hover:bg-gray-100 text-black">
+                                    <td class="border border-gray-300 px-4 py-2 text-center whitespace-nowrap"><?php echo $sl++; ?></td>
+                                    <td class="border border-gray-300 px-4 py-2 text-left whitespace-nowrap"><?php echo htmlspecialchars($designation); ?></td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center whitespace-nowrap"><?php echo $data['count']; ?></td>
+                                    <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap"><?php echo number_format(array_sum(array_column($data['details'], 'basic')), 2); ?></td>
+                                    <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap"><?php echo number_format(array_sum(array_column($data['details'], 'grossPay')), 2); ?></td>
+                                    <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap"><?php echo number_format(array_sum(array_column($data['details'], 'totalDeduction')), 2); ?></td>
+                                    <td class="border border-gray-300 px-4 py-2 text-right whitespace-nowrap"><?php echo number_format($totalDesignationPay, 2); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                </table>
+            </article>
             <aside class="flex gap-5 py-5">
                 <div class="text-right flex flex-col justify-center text-lg font-semibold">
                     <p>Total Pay (BDT):</p>
                     <p>In Words:</p>
                 </div>
                 <div class=" flex flex-col justify-center text-lg font-semibold">
-                    <p id="total-pay"><?php echo number_format($totalPay, 2); ?></p>
-                    <p id="total-pay-words-<?php echo $department; ?>" class="total-pay-words"></p>
+                    <p id="total-pay"><?php echo number_format($totalDepartmentPay, 2); ?></p>
+                    <p id="total-pay-words-<?php echo $gradee; ?>" class="total-pay-words"></p>
                 </div>
             </aside>
             <p class="font-semibold text-lg">Declaration: The amount claimed in this bill is correct and has not been drawn earlier</p>
@@ -200,6 +231,7 @@ $conn->close();
             <p>Web developed by: department of <span class="font-bold">Computer Science and Engineering, JUST</span> </p>
             <p>NB. If there is any error in your bill, immediately inform it to the Accounts Office of JUST</p>
         </section>
+        <?php endforeach; ?>
         <?php endif; ?>
         </section>
     </main>

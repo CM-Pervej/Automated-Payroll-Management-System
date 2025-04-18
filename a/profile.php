@@ -1,6 +1,6 @@
 <?php
-include 'view.php'; 
-include 'db_conn.php';
+include '../view.php'; 
+include '../db_conn.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -150,72 +150,32 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/8e69038194.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="sideBar.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        .suggestion-box {
-            position: absolute;
-            background-color: white;
-            border: 1px solid #ccc;
-            z-index: 1000;
-            width: 100%;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .suggestion-item {
-            padding: 8px 12px;
-            cursor: pointer;
-        }
-        .suggestion-item:hover {
-            background-color: #f0f0f0;
+        /* Page break styles */
+        .page-container {
+            page-break-before: always; /* Start a new page before this container */
+            page-break-after: always; /* End the page after this container */
         }
     </style>
+        <script>
+        // Automatically trigger the print dialog when the page loads
+        window.onload = function () {
+            window.print();
+        };
+    </script>
+    <script>
+        function toggleSelectAll(source, name) {
+            checkboxes = document.getElementsByName(name);
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
 </head>
 <body class="bg-blue-50 h-screen flex overflow-hidden">
-    <!-- Header -->
-    <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
-        <?php include 'sideBar.php'; ?>
-    </header>
     <!-- Main Content Area -->
-    <div class="flex flex-col flex-grow ml-64">
-        <!-- Top Bar -->
-        <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
-            <div class="container mx-auto flex items-center justify-between py-4 px-6">
-                <!-- Search Bar with Clear Icon -->
-                <div class="relative w-80">
-                    <input type="text" name="searchKeyword" id="searchKeyword" placeholder="Search Employee"
-                        class="w-full px-4 py-2 text-gray-700 bg-white border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        autocomplete="off">
-                    <div id="suggestionBox" class="suggestion-box hidden text-black"></div>
-                    <!-- Clear Icon -->
-                    <button id="clearSearch" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hidden"
-                        aria-label="Clear search">&times;</button>
-                </div>
-
-                <!-- Navigation Links -->
-                <div class="flex justify-center gap-4">
-                    <a href="select/addAllowance.php?employee_id=<?php echo $employee_id; ?>" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'style="display:none;"' : ''; ?> title="Only User1 can access this page">Allowance</a>
-                    <a href="select/addDeduction.php?employee_id=<?php echo $employee_id; ?>" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'style="display:none;"' : ''; ?> title="Only User1 can access this page">Deduction</a>
-                    <a href="select/empCharge.php?employee_id=<?php echo $employee_id; ?>" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'style="display:none;"' : ''; ?> title="Only User1 can access this page">Additional Duty</a>
-                    <a href="select/updateProfile.php?employee_id=<?php echo $employee_id; ?>" class="btn btn-primary">Update</a>
-                    <form method="POST">
-                        <input type="hidden" name="employee_id" value="<?php echo $employee_id; ?>" />
-                        <button type="submit" class="btn btn-success" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 4) ? 'style="display:none;"' : ''; ?> title="Only User1 can access this page">Confirm</button>
-                    </form>
-                </div>
-
-                <!-- User Profile Dropdown -->
-                <div class="relative">
-                    <button id="profileMenuButton" class="flex items-center space-x-2 focus:outline-none py-3 px-6 rounded-full shadow-inner bg-blue-300">
-                        <span class="text-black font-semibold"><?php echo htmlspecialchars($user['name']); ?></span>
-                    </button>
-                    <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 text-gray-800 z-20">
-                        <a href="/payroll/profile.php?employee_id=<?php echo $user['employee_id']; ?>" class="block px-4 py-2 hover:bg-gray-200">Profiles</a>
-                        <a href="/payroll/<?php echo $settings; ?>" class="block px-4 py-2 hover:bg-gray-200">Settings</a>
-                        <a href="/payroll/logout.php" class="block px-4 py-2 text-red-600 hover:bg-gray-200">Logout</a>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
+    <div class="page-container w-full mx-auto p-8 bg-white rounded-lg shadow-lg border">
         <!-- Content Section -->
         <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">
             <section class="flex-grow bg-white rounded-lg shadow-md p-6 mb-10 border border-gray-200">
@@ -224,7 +184,7 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
                     <div class="flex-shrink-0">
                         <?php if (!empty($employee['image'])): ?>
                             <?php 
-                                $imagePath = 'uploads/' . basename($employee['image']);
+                                $imagePath = '../uploads/' . basename($employee['image']);
                                 if (file_exists($imagePath)): 
                             ?>
                                 <img src="<?php echo $imagePath; ?>" alt="Profile image of <?php echo htmlspecialchars($employee['name']); ?>" class="w-36 h-36 object-cover rounded-lg border-4 border-gray-200 shadow-lg" />
@@ -246,7 +206,7 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
                     <!-- University Logo -->
                     <div class="ml-auto transform skew-x-12 py-2 shadow-lg flex items-center justify-center px-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg">
                         <figure class="transform -skew-x-12 w-24 h-24">
-                            <img src="uploads/JUSTt.png" alt="University Logo" class="w-full h-full object-cover rounded-md">
+                            <img src="../uploads/JUSTt.png" alt="University Logo" class="w-full h-full object-cover rounded-md">
                         </figure>
                     </div>
                 </div>
@@ -257,39 +217,9 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
                         <p class="text-2xl font-semibold border-b border-gray-400 pb-2 mb-2 mr-10">Personal Information</p>
                         <div>
                             <p><strong class="text-gray-500">Employee ID:</strong> <span class="font-semibold"><?php echo htmlspecialchars($employee['employeeNo']); ?></span></p>
-                            <p><strong class="text-gray-500">Gender:</strong> 
-                                <span class="font-semibold">
-                                    <?php 
-                                        $gender = $employee['gender'];
-
-                                        if ($gender == 1) {
-                                            echo "Male";
-                                        } elseif ($gender == 2) {
-                                            echo "Female";
-                                        } elseif ($gender == 0) {
-                                            echo "Other";
-                                        } else {
-                                            echo "Not specified";  // In case of an unexpected value
-                                        }
-                                    ?>
-                                </span>
-                            </p>
+                            <p><strong class="text-gray-500">Gender:</strong> <span class="font-semibold"><?php echo htmlspecialchars($employee['gender']); ?></span></p>
                             <p><strong class="text-gray-500">Date of Birth:</strong> <span class="font-semibold"><?php echo htmlspecialchars($formattedDateOfBirth); ?></span></p>
-                            <p><strong class="text-gray-500">Status:</strong> 
-                                <span class="font-semibold">
-                                    <?php 
-                                        $status = $employee['empStatus'];
-                                        
-                                        if ($status == 1) {
-                                            echo "Active";
-                                        } elseif ($status == 2) {
-                                            echo "Inactive";
-                                        } else {
-                                            echo "Not specified";  // In case of an unexpected value
-                                        }
-                                    ?>
-                                </span>
-                            </p>
+                            <p><strong class="text-gray-500">Status:</strong> <span class="font-semibold"><?php echo htmlspecialchars($employee['empStatus']); ?></span></p>
                             <p><strong class="text-gray-500">Contact:</strong> <span class="font-semibold"><?php echo htmlspecialchars($employee['contactNo']); ?></span></p>
                             <p><strong class="text-gray-500">Email:</strong> <span class="font-semibold"><?php echo htmlspecialchars($employee['email']); ?></span></p>
                         </div>
@@ -302,7 +232,7 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
                             <p class="text-base"><strong class="text-gray-500">Department:</strong> <span class="font-semibold"><?php echo htmlspecialchars($employee['department_name']); ?></span></p>
                             <p class="text-base"><strong class="text-gray-500">Designation:</strong> <span class="font-semibold"><?php echo htmlspecialchars($employee['primary_designation']); ?></span></p>
                             <p class="text-base"><strong class="text-gray-500">Grade:</strong> <span class="font-semibold"><?php echo htmlspecialchars($employee['grade']); ?></span></p>
-                            <p class="text-base"><strong class="text-gray-500">Scale:</strong> <span class="font-semibold"><?php echo number_format((float)$employee['scale'], 2); ?></span></p>
+                            <p class="text-base"><strong class="text-gray-500">Scale:</strong> <span class="font-semibold"><?php echo htmlspecialchars($employee['scale']); ?>.00</span></p>
                             <p class="text-base"><strong class="text-gray-500">Date of Joining:</strong> <span class="font-semibold"><?php echo htmlspecialchars($formattedJoiningDate); ?></span></p>
                             <p class="text-base"><strong class="text-gray-500">SB. A/C No:</strong> <span class="font-semibold"><?php echo htmlspecialchars($employee['account_number']); ?></span></p>
                             <p class="text-base"><strong class="text-gray-500">E-TIN:</strong> <span class="font-semibold"><?php echo htmlspecialchars($employee['e_tin']); ?></span></p>
@@ -320,10 +250,10 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
                                 <h2 class="text-2xl font-semibold border-b border-gray-400 pb-2 mb-2">Allowances</h2>
                                 <div>
                                     <p class="font-semibold text-gray-700">No of Increments: <span class="text-black"> <?php echo htmlspecialchars($employee['no_of_increment']); ?> </span></p>
-                                    <p class="font-semibold text-gray-700">Basic Salary: <span class="text-black"> <?php echo number_format((float)$employee['basic'], 2); ?></span></p>
+                                    <p class="font-semibold text-gray-700">Basic Salary: <span class="text-black"> <?php echo htmlspecialchars($employee['basic']); ?></span></p>
                                     <?php if (count($allowances) > 0): ?>
                                         <?php foreach ($allowances as $allowance): ?>
-                                            <p class="font-semibold text-gray-700"><?php echo htmlspecialchars($allowance['allwName']); ?>: <span class="text-black"><?php echo number_format((float)$allowance['allwTotal'], 2); ?></span></p>
+                                            <p class="font-semibold text-gray-700"><?php echo htmlspecialchars($allowance['allwName']); ?>: <span class="text-black"><?php echo htmlspecialchars($allowance['allwTotal']);  ?></span></p>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <p>No allowances found.</p>
@@ -336,7 +266,7 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
                                 <div>
                                     <?php if (count($deductions) > 0): ?>
                                         <?php foreach ($deductions as $deduction): ?>
-                                            <p class="font-semibold text-gray-700"><?php echo htmlspecialchars($deduction['dedName']); ?>: <span class="text-black"><?php echo number_format((float)$deduction['dedTotal'], 2); ?></span></p>
+                                            <p class="font-semibold text-gray-700"><?php echo htmlspecialchars($deduction['dedName']); ?>: <span class="text-black"><?php echo htmlspecialchars($deduction['dedTotal']);  ?></span></p>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <p>No deductions found.</p>
@@ -363,8 +293,8 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
                             <div class="bg-red-50 p-4 rounded-lg shadow-md">
                                 <h2 class="text-2xl font-semibold border-b border-gray-400 pb-2 mb-2">Additional Salary</h2>
                                 <?php if ($empAddSalary): ?>
-                                    <p class="font-semibold">Charge Allowance: <?php echo number_format((float)$empAddSalary['chargeAllw'], 2); ?></p>
-                                    <p class="font-semibold">Telephone Allowance: <?php echo number_format((float)$empAddSalary['telephoneAllwance'], 2); ?></p>
+                                    <p class="font-semibold">Charge Allowance: <?php echo htmlspecialchars($empAddSalary['chargeAllw']); ?></p>
+                                    <p class="font-semibold">Telephone Allowance: <?php echo htmlspecialchars($empAddSalary['telephoneAllwance']); ?></p>
                                 <?php else: ?>
                                     <p>No additional salary details found.</p>
                                 <?php endif; ?>
@@ -381,9 +311,9 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
                             <div class="bg-green-50 p-4 rounded-lg shadow-md w-full">
                                 <h2 class="text-2xl font-semibold border-b border-gray-400 pb-2 mb-2">Financial Summary</h2>
                                 <div>
-                                    <p class="font-semibold">Total Deduction: <?php echo number_format((float)$totalDeduction, 2); ?></p>
-                                    <p class="font-semibold">Gross Pay: <?php echo number_format((float)$grossPay, 2); ?></p>
-                                    <p class="font-semibold">Net Pay: <?php echo number_format((float)$netPay, 2); ?></p>
+                                    <p class="font-semibold">Total Deduction: <?php echo htmlspecialchars($totalDeduction); ?></p>
+                                    <p class="font-semibold">Gross Pay: <?php echo htmlspecialchars($grossPay); ?></p>
+                                    <p class="font-semibold">Net Pay: <?php echo htmlspecialchars($netPay); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -453,6 +383,25 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
 
         // Clear button click handler
         clearButton.onclick = clearSuggestions;
+    </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+    <script>
+        document.getElementById("generatePDF").addEventListener("click", function() {
+            // Capture the entire page content for PDF generation
+            const element = document.body;  // Capture the body of the page
+            
+            // Options for the PDF generation
+            const options = {
+                filename: 'employee_payroll.pdf',  // Filename of the PDF
+                image: { type: 'jpeg', quality: 0.98 },  // Set image type and quality
+                html2canvas: { scale: 2 },  // Increase the scale for better quality
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },  // PDF format
+                pagebreak: { mode: ['css', 'legacy'] }  // Ensure proper page breaks
+            };
+            
+            // Generate the PDF
+            html2pdf().from(element).set(options).save();
+        });
     </script>
 </body>
 </html>

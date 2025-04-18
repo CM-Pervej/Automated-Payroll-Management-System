@@ -24,8 +24,7 @@ $current_month = $start_month;
 // Loop through each month in the range from start to end
 while (($current_year < $end_year) || ($current_year == $end_year && $current_month <= $end_month)) {
     // Prepare the SQL statement to fetch payroll data for the current month
-    $query = "SELECT * FROM payroll WHERE 
-                (year = ? AND month = ?)";
+    $query = "SELECT * FROM payroll WHERE year = ? AND month = ?";
 
     // Prepare the statement
     $stmt = $conn->prepare($query);

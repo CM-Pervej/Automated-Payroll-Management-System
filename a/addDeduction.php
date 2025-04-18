@@ -1,13 +1,5 @@
 <?php
-include 'auth.php';
 include '../db_conn.php';
-
-// Check if the user is logged in and is an Admin
-if (!isset($_SESSION['user_id']) || ($_SESSION['userrole_id'] != 1 && $_SESSION['userrole_id'] != 2 && $_SESSION['userrole_id'] != 4)) {
-    header('Location: ../dashboard.php'); // Redirect to dashboard if not Admin
-    exit();
-}
-
 $employee_id = isset($_GET['employee_id']) ? (int)$_GET['employee_id'] : 0;
 
 if ($employee_id <= 0) {
@@ -181,6 +173,20 @@ $total_deduction_stmt->close();
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="sideBar.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Page break styles */
+        .page-container {
+            page-break-before: always; /* Start a new page before this container */
+            page-break-after: always; /* End the page after this container */
+        }
+    </style>
+        <script>
+        // Automatically trigger the print dialog when the page loads
+        window.onload = function () {
+            window.print();
+        };
+    </script>
     <script>
         function toggleSelectAll(source, name) {
             checkboxes = document.getElementsByName(name);
@@ -191,24 +197,8 @@ $total_deduction_stmt->close();
     </script>
 </head>
 <body class="bg-blue-50 h-screen flex overflow-hidden">
-    <!-- Sidebar (fixed) -->
-    <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
-        <?php include '../sideBar.php'; ?>
-    </header>
-
-    <!-- Main Content Area -->
-    <div class="flex flex-col flex-grow ml-64">
-        <!-- Top Bar (fixed) -->
-        <div class="w-full">
-            <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
-                <?php include '../topBar.php'; ?>
-            </aside>
-         </div>
-
-        <!-- Content Section -->
-        <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">
-            <div class="w-full max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-lg border">
-                <h1 class="text-3xl font-semibold mb-4 text-gray-800">Manage Allowances for <?php echo htmlspecialchars($employeeName); ?> (<?php echo htmlspecialchars($employeeNo); ?>)</h1>
+            <div class="page-container w-full mx-auto p-8 bg-white rounded-lg shadow-lg border">
+                <h1 class="text-3xl font-semibold mb-4 text-gray-800">Manage Deductions for <?php echo htmlspecialchars($employeeName); ?> (<?php echo htmlspecialchars($employeeNo); ?>)</h1>
 
                 <!-- Success/Error Messages -->
                 <?php if ($successMessage): ?>
@@ -251,13 +241,13 @@ $total_deduction_stmt->close();
                                     while ($row = $confirmed_deductions_result->fetch_assoc()):
                                 ?>
                                     <tr class="border-b hover:bg-indigo-50 transition duration-150 ease-in-out">
-                                        <td class="px-4 py-2 border">
+                                        <td class="px-4 py-1 border">
                                             <input type="checkbox" name="remove_deductions[]" value="<?php echo $row['deductionList_id']; ?>" />
                                         </td>
-                                        <td class="px-4 py-2 border"><?php echo htmlspecialchars($row['dedName']); ?></td>
-                                        <td class="px-4 py-2 text-gray-700 border"><?php echo htmlspecialchars($row['dedPercentage']); ?></td>
-                                        <td class="px-4 py-2 text-gray-700 border"><?php echo number_format($row['dedValue'], 2); ?></td>
-                                        <td class="px-4 py-2 border">
+                                        <td class="px-4 py-1 border"><?php echo htmlspecialchars($row['dedName']); ?></td>
+                                        <td class="px-4 py-1 text-gray-700 border"><?php echo htmlspecialchars($row['dedPercentage']); ?></td>
+                                        <td class="px-4 py-1 text-gray-700 border"><?php echo number_format($row['dedValue'], 2); ?></td>
+                                        <td class="px-4 py-1 border">
                                             <input type="text" name="dedTotal[<?php echo $row['deductionList_id']; ?>]" 
                                                 value="<?php echo $row['dedTotal']; ?>" 
                                                 class="border p-2 w-full rounded-md" />
@@ -267,12 +257,13 @@ $total_deduction_stmt->close();
                             </tbody>
                         </table>
                     </div>
-
-                    <div class="flex space-x-4">
-                        <button type="submit" name="remove_deductions_btn" class="mt-4 p-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-150">Remove Selected Deductions</button>
-                        <button type="submit" name="confirm_deductions_btn" class="mt-4 p-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-150">Confirm Selected Deductions</button>
-                    </div>
                 </form>
+
+                <div class="flex justify-between items-center my-5">
+                    <p class="text-black rounded-md text-center text-xl border border-black p-3">Confirm Selected Deductions</p>
+                    <p class="text-black rounded-md text-center text-xl border border-black p-3">Remove Selected Deductions</p>
+                </div>
+
 
                 <form action="addDeduction.php?employee_id=<?php echo $employee_id; ?>" method="POST" class="mt-8">
                     <h2 class="text-xl font-semibold mb-4 text-gray-700">Available Deductions</h2>
@@ -282,7 +273,7 @@ $total_deduction_stmt->close();
                                 <th class="px-4 py-2 text-left border">
                                     <input type="checkbox" onclick="toggleSelectAll(this, 'deductions[]')">
                                 </th>
-                                <th class="px-4 py-2 text-left border">Dedution Name</th>
+                                <th class="px-4 py-2 text-left border">Deduction Name</th>
                                 <th class="px-4 py-2 text-left border">Percentage</th>
                                 <th class="px-4 py-2 text-left border">Value</th>
                             </tr>
@@ -291,16 +282,16 @@ $total_deduction_stmt->close();
                             <?php while ($row = $deductions->fetch_assoc()): ?>
                                 <?php if (!in_array($row['id'], $existing_deductions)): ?>
                                     <tr class="border-b hover:bg-indigo-50 transition duration-150 ease-in-out">
-                                        <td class="px-4 py-2 border">
+                                        <td class="px-4 py-1 border">
                                             <input type="checkbox" name="deductions[]" value="<?php echo $row['id']; ?>">
                                         </td>
-                                        <td class="px-4 py-2 border text-gray-700"><?php echo htmlspecialchars($row['dedName']); ?></td>
-                                        <td class="px-4 py-2 border">
+                                        <td class="px-4 py-1 border text-gray-700"><?php echo htmlspecialchars($row['dedName']); ?></td>
+                                        <td class="px-4 py-1 border">
                                             <input type="text" name="dedPercentage[<?php echo $row['id']; ?>]" 
                                                 value="<?php echo $row['dedPercentage']; ?>" 
                                                 class="border p-2 w-full rounded-md" />
                                         </td>
-                                        <td class="px-4 py-2 border">
+                                        <td class="px-4 py-1 border">
                                             <input type="text" name="dedValue[<?php echo $row['id']; ?>]" 
                                                 value="<?php echo $row['dedValue']; ?>" 
                                                 class="border p-2 w-full rounded-md" />
@@ -310,11 +301,31 @@ $total_deduction_stmt->close();
                             <?php endwhile; ?>
                         </tbody>
                     </table>
-
-                    <button type="submit" class="w-full bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition duration-200 ease-in-out">Select Deductions</button>
                 </form>
+                <div class="flex justify-center items-center my-5">
+                    <p class="text-black rounded-md text-center text-xl border border-black p-3">Select Deductions</p>
+                </div>
             </div>
-         </main>
-    </div>
+
+            
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+    <script>
+        document.getElementById("generatePDF").addEventListener("click", function() {
+            // Capture the entire page content for PDF generation
+            const element = document.body;  // Capture the body of the page
+            
+            // Options for the PDF generation
+            const options = {
+                filename: 'employee_payroll.pdf',  // Filename of the PDF
+                image: { type: 'jpeg', quality: 0.98 },  // Set image type and quality
+                html2canvas: { scale: 2 },  // Increase the scale for better quality
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },  // PDF format
+                pagebreak: { mode: ['css', 'legacy'] }  // Ensure proper page breaks
+            };
+            
+            // Generate the PDF
+            html2pdf().from(element).set(options).save();
+        });
+    </script>
 </body>
 </html>
