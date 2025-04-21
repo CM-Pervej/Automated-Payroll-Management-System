@@ -99,21 +99,25 @@ $conn->close();
                 <?php if (empty($grades)): ?>
                     <p class="text-gray-600">No grades found.</p>
                 <?php else: ?>
-                    <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg">
+                    <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg text-center">
                         <thead class="bg-gray-400">
                             <tr class="w-full">
-                                <th class="px-6 py-4 text-left text-sm text-gray-700 font-bold w-1/4">Grade</th>
-                                <th class="px-6 py-4 text-left text-sm text-gray-700 font-bold w-1/4">Increment</th>
-                                <th class="px-6 py-4 text-left text-sm text-gray-700 font-bold w-1/4">Scale</th>
-                                <th class="px-6 py-4 text-left text-sm text-gray-700 font-bold w-1/4">Grade Percentage</th>
+                                <th class="px-6 py-4 border-r text-sm text-gray-700 font-bold w-1/4">Grade</th>
+                                <th class="px-6 py-4 border-r text-sm text-gray-700 font-bold w-1/4">Increment</th>
+                                <th class="px-6 py-4 border-r text-sm text-gray-700 font-bold w-1/4">Scale</th>
+                                <th class="px-6 py-4 text-sm text-gray-700 font-bold w-1/4">Grade Percentage</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <?php foreach ($grades as $grade): ?>
                                 <tr class="hover:bg-gray-100">
-                                    <td class="px-6 py-4"><?= htmlspecialchars($grade['grade']); ?></td>
-                                    <td class="px-6 py-4"><?= htmlspecialchars($grade['increment']); ?></td>
-                                    <td class="px-6 py-4"><?= htmlspecialchars($grade['scale']); ?></td>
+                                    <td class="px-6 py-4 border-r">
+                                        <a href="group.php?grade_id=<?= htmlspecialchars($grade['id']); ?>" class="text-blue-600 hover:underline">
+                                            <?= htmlspecialchars($grade['grade']); ?>
+                                        </a>
+                                    </td>
+                                    <td class="px-6 py-4 border-r"><?= htmlspecialchars($grade['increment']); ?></td>
+                                    <td class="px-6 py-4 border-r"><?= htmlspecialchars($grade['scale']); ?></td>
                                     <td class="px-6 py-4"><?= htmlspecialchars($grade['gradePercentage']); ?>%</td>
                                 </tr>
                             <?php endforeach; ?>

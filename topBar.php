@@ -131,7 +131,7 @@ if ($stmt = $conn->prepare($query)) {
                 item.className = 'suggestion-item';
                 item.textContent = suggestion.value;
                 item.onclick = function() {
-                    window.location.href = "search.php?keyword=" + encodeURIComponent(suggestion.value);
+                    window.location.href = "/payroll/search.php?keyword=" + encodeURIComponent(suggestion.value);
                 };
                 suggestionBox.appendChild(item);
             });

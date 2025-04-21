@@ -96,14 +96,17 @@ $conn->close();
                     <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg">
                         <thead class="bg-gray-200">
                             <tr class="w-full">
+                                <th class="px-6 py-4 text-left text-sm text-gray-700 font-bold border-r border-gray-300 w-1/12">S/N</th>
                                 <th class="px-6 py-4 text-left text-sm text-gray-700 font-bold border-r border-gray-300 w-1/3">Allowance Name</th>
                                 <th class="px-6 py-4 text-left text-sm text-gray-700 font-bold border-r border-gray-300 w-1/3">Allowance Percentage</th>
                                 <th class="px-6 py-4 text-left text-sm text-gray-700 font-bold w-1/3">Allowance Value</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
+                            <?php $serial = 1; ?>
                             <?php foreach ($allowances as $allowance): ?>
                                 <tr class="hover:bg-gray-100">
+                                    <td class="px-6 py-4 border-r border-gray-200"><?php echo $serial++; ?></td> <!-- Serial Number Display -->
                                     <td class="px-6 py-4 border-r border-gray-200"><?php echo htmlspecialchars($allowance['allwName']); ?></td>
                                     <td class="px-6 py-4 border-r border-gray-200"><?php echo htmlspecialchars($allowance['allwPercentage']); ?>%</td>
                                     <td class="px-6 py-4 border-r border-gray-200"><?php echo htmlspecialchars($allowance['allwValue']); ?></td>

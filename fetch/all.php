@@ -148,7 +148,7 @@ $conn->close();
                 </div>
 
                 <!-- Add/Update Designation Modal -->
-                <div id="modal" class="fixed inset-0 flex items-center justify-center z-50 hidden bg-gray-500 bg-opacity-50">
+                <div id="modal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
                     <div class="bg-white rounded-lg shadow-lg p-6 w-96">
                         <h2 class="text-lg font-bold mb-4" id="modalTitle">Add New Designation</h2>
                         <form method="POST">

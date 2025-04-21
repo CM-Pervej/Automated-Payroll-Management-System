@@ -78,13 +78,20 @@ $conn->close();
                     <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg">
                         <thead class="bg-gray-400">
                             <tr>
-                                <th class="px-6 py-4 text-left text-sm text-gray-700 font-bold">Department Name</th>
+                                <th class="px-6 py-4 text-left text-gray-700">S/N</th>
+                                <th class="px-6 py-4 text-left text-gray-700">Department Name</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
+                            <?php $serial = 1; ?>
                             <?php foreach ($departments as $department): ?>
                                 <tr class="hover:bg-gray-100">
-                                    <td class="px-6 py-4"><?php echo htmlspecialchars($department['department_name']); ?></td>
+                                    <td class="px-6 py-4"><?php echo $serial++; ?></td>
+                                    <td class="px-6 py-4 border-r">
+                                        <a href="group.php?department_id=<?= htmlspecialchars($department['id']); ?>" class="text-blue-600 hover:underline">
+                                            <?= htmlspecialchars($department['department_name']); ?>
+                                        </a>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
