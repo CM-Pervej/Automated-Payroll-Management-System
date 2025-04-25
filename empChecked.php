@@ -64,7 +64,6 @@ $conn->close();
     <!-- TailWind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/8e69038194.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="sideBar.css">
     <script>
         function toggleSelectAll(source, name) {
             checkboxes = document.getElementsByName(name);

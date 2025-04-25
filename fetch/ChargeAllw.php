@@ -68,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/8e69038194.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../sideBar.css">
 </head>
 <body class="bg-blue-50 h-screen flex overflow-hidden">
     <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
@@ -103,21 +102,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 </section>
 
-                <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg">
+                <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg text-center">
                     <thead>
                         <tr class="bg-gray-200">
                             <th class="px-6 py-4 text-gray-700 font-bold">ID</th>
-                            <th class="px-6 py-4 text-left text-sm text-gray-700 font-bold w-1/3">Additional Designation</th>
-                            <th class="px-6 py-4 text-left text-sm text-gray-700 font-bold w-1/3">Additional Salary</th>
-                            <th class="px-6 py-4 text-left text-sm text-gray-700 font-bold w-1/3">Telephone Allowance(s)</th>
+                            <th class="px-6 py-4 text-gray-700 font-bold">Additional Designation</th>
+                            <th class="px-6 py-4 text-gray-700 font-bold">Additional Salary</th>
+                            <th class="px-6 py-4 text-gray-700 font-bold">Telephone Allowance(s)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (!empty($additionalSalaries)): ?>
                             <?php foreach ($additionalSalaries as $id => $data): ?>
                                 <tr class="bg-white">
-                                    <td class="border px-4 py-2 text-center"><?php echo $id; ?></td>
-                                    <td class="border px-4 py-2"><?php echo $data['designation']; ?></td>
+                                    <td class="border px-4 py-2"><?php echo $id; ?></td>
+                                    <td>
+                                        <a href="add_group.php?AdditionalDesignation_id=<?= htmlspecialchars($id); ?>" class="text-blue-600 w-full block py-4 transform transition-all duration-150 hover:scale-125">
+                                            <?= htmlspecialchars($data['designation']); ?>
+                                        </a>
+                                    </td>
                                     <td class="border px-4 py-2"><?php echo number_format($data['addSalary'], 2); ?></td>
                                     <td class="border px-4 py-2">
                                         <ul class="flex gap-5">

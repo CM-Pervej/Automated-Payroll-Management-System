@@ -78,7 +78,6 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/8e69038194.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../sideBar.css">
 </head>
 <body class="bg-blue-50 h-screen flex overflow-hidden">
     <!-- Sidebar (fixed) -->
@@ -116,28 +115,26 @@ $conn->close();
                     <?php if (empty($designations)) : ?>
                         <p class="text-gray-600">No designations found.</p>
                     <?php else : ?>
-                        <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg">
+                        <table class="w-full rounded-lg shadow-lg text-center">
                             <thead class="bg-gray-400">
                                 <tr>
-                                    <th class="px-6 py-4 text-left text-gray-700">S/N</th>
-                                    <th class="px-6 py-4 text-left text-gray-700 border-l">Designation Name</th>
-                                    <th class="px-6 py-4 text-left text-gray-700 border-l" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'style="display:none;"' : ''; ?> title="Only Admin and HR can access this page">Actions</th>
+                                    <th class="text-gray-700 w-16">S/N</th>
+                                    <th class="px-6 py-4 text-gray-700 border-l">Designation Name</th>
+                                    <th class="w-32 text-gray-700 border-l" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'style="display:none;"' : ''; ?> title="Only Admin and HR can access this page">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 <?php $serial = 1; ?>
                                 <?php foreach ($designations as $designation) : ?>
                                     <tr class="hover:bg-gray-100">
-                                        <td class="px-6 py-4"><?php echo $serial++; ?></td>
-                                        <td class="px-6 py-4 border-l">
-                                            <a href="group.php?designation_id=<?= htmlspecialchars($designation['id']); ?>" class="text-blue-600 hover:underline">
+                                        <td class="text-center w-16"><?php echo $serial++; ?></td>
+                                        <td class="px-6 border-l w-max overflow-hidden">
+                                            <a href="group.php?designation_id=<?= htmlspecialchars($designation['id']); ?>" class="text-blue-600 w-full block py-4 transform transition-all duration-150 hover:scale-125">
                                                 <?= htmlspecialchars($designation['designation']); ?>
                                             </a>
                                         </td>
-                                        <td class="px-6 py-4 flex gap-4 border-l" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'style="display:none;"' : ''; ?> title="Only Admin and HR can access this page">
-                                            <!-- Update Button -->
+                                        <td class="flex gap-4 py-4 px-6 border-l" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'style="display:none;"' : ''; ?> title="Only Admin and HR can access this page">
                                             <button data-id="<?= $designation['id']; ?>" data-name="<?= $designation['designation']; ?>" class="updateBtn text-green-600 hover:text-green-700">Update</button>
-                                            <!-- Delete Button -->
                                             <button data-id="<?= $designation['id']; ?>" data-name="<?= $designation['designation']; ?>" class="deleteBtn text-red-600 hover:text-red-700">Delete</button>
                                         </td>
                                     </tr>

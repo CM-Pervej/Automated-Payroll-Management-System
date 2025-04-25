@@ -174,7 +174,6 @@ if ($existingTelephoneResult->num_rows > 0) {
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/8e69038194.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="sideBar.css">
 </head>
 <body class="bg-blue-50 h-screen flex overflow-hidden">
     <!-- Sidebar (fixed) -->

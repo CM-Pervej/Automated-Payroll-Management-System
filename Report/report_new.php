@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Include the database connection
-include 'db_conn.php';
+include '../db_conn.php';
 
 // Get the current month and year
 $currentMonth = date('m');
@@ -101,18 +101,18 @@ if ($result) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payroll Report</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="sideBar.css">
+    <link rel="stylesheet" href="../sideBar.css">
 </head>
 <body class="bg-blue-50 h-screen flex overflow-hidden">
     <!-- Sidebar -->
     <header class="w-64 bg-blue-50 text-white fixed h-full sidebar-scrollable">
-        <?php include 'sideBar.php'; ?>
+        <?php include '../sideBar.php'; ?>
     </header>
 
     <!-- Main Content -->
     <div class="flex flex-col flex-grow ml-64">
         <aside class="fixed left-64 top-0 right-0 bg-blue-50 shadow-md z-10">
-            <?php include 'topBar.php'; ?>
+            <?php include '../topBar.php'; ?>
         </aside>
         <main class="flex-grow p-4 mt-16 bg-white shadow-lg overflow-auto">
             <!-- Summary Section -->

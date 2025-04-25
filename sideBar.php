@@ -10,6 +10,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/8e69038194.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/payroll/sideBar.css">
     <style>
         .sidebar-active-link {
             background-color: white;
@@ -54,7 +55,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <div class="my-5">
             <p class="text-sm sidebar-heading">MAIN MENU</p>
             <nav class="flex flex-col mt-3 space-y-2">
-                <a href="/payroll/dashboard.php" class="sidebar-link <?php echo ($currentPage == 'index.php') ? 'sidebar-active-link' : ''; ?>"><i class="fas fa-home mr-2"></i><span>Dashboard</span></a>
+                <a href="/payroll/dashboard.php" class="sidebar-link <?php echo ($currentPage == 'dashboard.php') ? 'sidebar-active-link' : ''; ?>"><i class="fas fa-home mr-2"></i><span>Dashboard</span></a>
                 <a href="/payroll/employee.php" class="sidebar-link <?php echo ($currentPage == 'employee.php') ? 'sidebar-active-link' : ''; ?>"><i class="fas fa-users mr-2"></i><span>Employee</span></a>  
                 <a href="/payroll/payroll.php" class="sidebar-link <?php echo ($currentPage == 'payroll.php') ? 'sidebar-active-link' : ''; ?>"><i class="fas fa-file-invoice-dollar mr-2"></i><span>Payroll</span></a>
                 <a href="/payroll/report/report.php" class="sidebar-link <?php echo ($currentPage == 'report.php') ? 'sidebar-active-link' : ''; ?>"><i class="fas fa-file-invoice-dollar mr-2"></i><span>Report</span></a>

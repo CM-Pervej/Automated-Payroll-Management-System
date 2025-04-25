@@ -149,7 +149,6 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/8e69038194.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="sideBar.css">
     <style>
         .suggestion-box {
             position: absolute;

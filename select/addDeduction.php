@@ -180,7 +180,6 @@ $total_deduction_stmt->close();
     <title>Select Deductions</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="sideBar.css">
     <script>
         function toggleSelectAll(source, name) {
             checkboxes = document.getElementsByName(name);

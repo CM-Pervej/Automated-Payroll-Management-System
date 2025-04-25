@@ -47,7 +47,6 @@ if ($result) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payroll Report</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="sideBar.css">
 </head>
 <body class="bg-blue-50 h-screen flex overflow-hidden">
   <!-- Sidebar -->
@@ -94,13 +93,13 @@ if ($result) {
                 </section>
               </aside>
               <p class="flex gap-5 w-max">
-                <a id="monthlyUniversityReport" href="#" class="w-full bg-yellow-600 text-white font-semibold p-3 rounded-md hover:bg-yellow-700 transition duration-200"> University </a>
-                <a id="monthlyEmployeeReport" href="#" class="w-full bg-blue-600 text-white font-semibold p-3 rounded-md hover:bg-blue-700 transition duration-200"> Employee </a>
-                <a id="monthlyDepartmentReport" href="#" class="w-full bg-green-600 text-white font-semibold p-3 rounded-md hover:bg-green-700 transition duration-200"> Department </a>
-                <a id="monthlyDepartmentReport2" href="#" class="w-full bg-green-600 text-white font-semibold p-3 rounded-md hover:bg-green-700 transition duration-200"> Department </a>
-                <a id="monthlyDesignationReport" href="#" class="w-full bg-violet-600 text-white font-semibold p-3 rounded-md hover:bg-violet-700 transition duration-200"> Designation </a>
-                <a id="monthlyGradeReport" href="#" class="w-full bg-cyan-600 text-white font-semibold p-3 rounded-md hover:bg-cyan-700 transition duration-200"> Grade </a>
-                <a id="monthlyGenderReport" href="#" class="w-full bg-fuchsia-600 text-white font-semibold p-3 rounded-md hover:bg-fuchsia-700 transition duration-200"> Gender </a>
+                <a id="monthlyUniversityReport" href="#" class="w-full bg-yellow-500 text-white font-semibold p-3 rounded-md hover:bg-yellow-700 transition duration-200"> University </a>
+                <a id="monthlyEmployeeReport" href="#" class="w-full bg-blue-500 text-white font-semibold p-3 rounded-md hover:bg-blue-700 transition duration-200"> Employee </a>
+                <a id="monthlyDepartmentReport" href="#" class="w-full bg-green-500 text-white font-semibold p-3 rounded-md hover:bg-green-700 transition duration-200"> Department </a>
+                <a id="monthlyDepartmentReport2" href="#" class="w-full bg-green-500 text-white font-semibold p-3 rounded-md hover:bg-green-700 transition duration-200"> Department </a>
+                <a id="monthlyDesignationReport" href="#" class="w-full bg-violet-500 text-white font-semibold p-3 rounded-md hover:bg-violet-700 transition duration-200"> Designation </a>
+                <a id="monthlyGradeReport" href="#" class="w-full bg-cyan-500 text-white font-semibold p-3 rounded-md hover:bg-cyan-700 transition duration-200"> Grade </a>
+                <a id="monthlyGenderReport" href="#" class="w-full bg-fuchsia-500 text-white font-semibold p-3 rounded-md hover:bg-fuchsia-700 transition duration-200"> Gender </a>
               </p>
             </div>
 
@@ -112,9 +111,12 @@ if ($result) {
                       <!-- Multiple Buttons with Different Links -->
                       <div class="flex gap-5 w-max">
                           <!-- Buttons: All use the same function, but pass different URLs -->
-                          <button onclick="generateReport('just_year.php')" class="w-full bg-yellow-600 text-white font-semibold p-3 rounded-md hover:bg-yellow-700 transition duration-200">University</button>
-                          <button onclick="generateReport('employee_year.php')"class="w-full bg-blue-600 text-white font-semibold p-3 rounded-md hover:bg-blue-700 transition duration-200">Employee</button>
-                          <button class="p-3 bg-yellow-500 text-white rounded-md" onclick="generateReport('custom_report.php')">Department</button>
+                          <button onclick="generateReport('uni_year.php')" class="w-full bg-yellow-500 text-white font-semibold p-3 rounded-md hover:bg-yellow-700 transition duration-200">University</button>
+                          <button onclick="generateReport('employee_year.php')"class="w-full bg-blue-500 text-white font-semibold p-3 rounded-md hover:bg-blue-700 transition duration-200">Employee</button>
+                          <button  onclick="generateReport('dept_year.php')" class="w-full bg-green-500 text-white font-semibold p-3 rounded-md hover:bg-green-700 transition duration-200">Department</button>
+                          <button  onclick="generateReport('desi_year.php')" class="w-full bg-violet-500 text-white font-semibold p-3 rounded-md hover:bg-violet-700 transition duration-200">Designation</button>
+                          <button  onclick="generateReport('grade_year.php')" class="w-full bg-cyan-500 text-white font-semibold p-3 rounded-md hover:bg-cyan-700 transition duration-200">Grade</button>
+                          <button  onclick="generateReport('gender_year.php')" class="w-full bg-fuchsia-500 text-white font-semibold p-3 rounded-md hover:bg-fuchsia-700 transition duration-200">Gender</button>
                       </div>
                   </div>
                   <!-- Filters -->
@@ -172,11 +174,11 @@ if ($result) {
       const downloadFrame = document.getElementById("downloadFrame");
 
       const reportLinks = {
-        monthlyUniversityReport: "just_month.php",
+        monthlyUniversityReport: "uni_month.php",
         monthlyEmployeeReport: "employee_month.php",
-        monthlyDepartmentReport: "deptReport.php",
-        monthlyDepartmentReport2: "deptReport2.php",
-        monthlyDesignationReport: "designReport.php",
+        monthlyDepartmentReport: "dept_month.php",
+        monthlyDepartmentReport2: "dept_month2.php",
+        monthlyDesignationReport: "desi_month.php",
         monthlyGradeReport: "grade_month.php",
         monthlyGenderReport: "gender_month.php",
       };
