@@ -145,25 +145,6 @@ $conn->close();
             <hr class="border border-black">
         </section>
 
-        <!-- <h1>General Details</h1> -->
-        <section class="grid grid-cols-2 w-full gap-5">
-            <article class="flex justify-center items-end gap-3 flex-1">
-                <div class="text-right">
-                    <p>Name:</p> <p>Chairman:</p> <p>Email:</p> <p>Phone:</p>
-                </div>
-                <div>
-                    <p><?php echo htmlspecialchars($department); ?></p> <p>Pervej Chowkider</p> <p>pervejbd2029@gmail.com</p> <p>01982525570</p>
-                </div>
-            </article>
-            <article class="flex justify-center items-end gap-3 flex-1">
-                <div class="text-right">
-                    <p>Established Year:</p> <p>Location:</p> <p>Total Employee:</p>
-                </div>
-                <div>
-                    <p>2007</p> <p>2nd Floor, Academic Building</p> <p>20</p>
-                </div>
-            </article>
-        </section>
         <section class="mt-5">
             <p class="text-xl">Salary Details of <span class="font-bold"><?php echo htmlspecialchars($department); ?></span> </p>
             <article class="mt-5">

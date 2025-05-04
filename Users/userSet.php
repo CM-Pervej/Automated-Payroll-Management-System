@@ -140,13 +140,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Form -->
             <div class="container mx-auto px-5 pb-5">
                 <div class="bg-white rounded-lg shadow-lg px-8 pb-8 pt-2 border">
-                    <h1 class="text-3xl font-semibold text-center text-gray-800">Add Employee</h1>
+                    <h1 class="text-3xl font-semibold text-center text-gray-800">Add New User</h1>
 
                     <?php if (!empty($errorMessages)): ?>
                         <div class="text-red-600 text-center"><?php echo implode('<br>', $errorMessages); ?></div>
                     <?php endif; ?>
 
-                    <form method="POST" enctype="multipart/form-data" class="mt-6">
+                    <form method="POST" enctype="multipart/form-data" class="mt-6" autocomplete="off">
                         <table class="w-full">
                             <tbody>
                                 <tr>
@@ -279,7 +279,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </tr>
                             </tbody>
                         </table>
-                        <button type="submit" class="mt-6 w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700">Add Employee</button>
+                        <button type="submit" class="mt-6 w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700">Add New User</button>
                     </form>
                 </div>
             </div>

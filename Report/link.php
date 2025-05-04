@@ -96,7 +96,7 @@ if ($result) {
                 <a id="monthlyUniversityReport" href="#" class="w-full bg-yellow-500 text-white font-semibold p-3 rounded-md hover:bg-yellow-700 transition duration-200"> University </a>
                 <a id="monthlyEmployeeReport" href="#" class="w-full bg-blue-500 text-white font-semibold p-3 rounded-md hover:bg-blue-700 transition duration-200"> Employee </a>
                 <a id="monthlyDepartmentReport" href="#" class="w-full bg-green-500 text-white font-semibold p-3 rounded-md hover:bg-green-700 transition duration-200"> Department </a>
-                <a id="monthlyDepartmentReport2" href="#" class="w-full bg-green-500 text-white font-semibold p-3 rounded-md hover:bg-green-700 transition duration-200"> Department </a>
+                <!-- <a id="monthlyDepartmentReport2" href="#" class="w-full bg-green-500 text-white font-semibold p-3 rounded-md hover:bg-green-700 transition duration-200"> Department </a> -->
                 <a id="monthlyDesignationReport" href="#" class="w-full bg-violet-500 text-white font-semibold p-3 rounded-md hover:bg-violet-700 transition duration-200"> Designation </a>
                 <a id="monthlyGradeReport" href="#" class="w-full bg-cyan-500 text-white font-semibold p-3 rounded-md hover:bg-cyan-700 transition duration-200"> Grade </a>
                 <a id="monthlyGenderReport" href="#" class="w-full bg-fuchsia-500 text-white font-semibold p-3 rounded-md hover:bg-fuchsia-700 transition duration-200"> Gender </a>
@@ -177,7 +177,7 @@ if ($result) {
         monthlyUniversityReport: "uni_month.php",
         monthlyEmployeeReport: "employee_month.php",
         monthlyDepartmentReport: "dept_month.php",
-        monthlyDepartmentReport2: "dept_month2.php",
+        // monthlyDepartmentReport2: "dept_month2.php",
         monthlyDesignationReport: "desi_month.php",
         monthlyGradeReport: "grade_month.php",
         monthlyGenderReport: "gender_month.php",

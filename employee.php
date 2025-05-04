@@ -12,7 +12,8 @@ $query = "SELECT e.id, e.employeeNo, e.name, e.empStatus, e.grade_id, e.image, d
     LEFT JOIN departments d ON e.department_id = d.id
     LEFT JOIN designations des ON e.designation_id = des.id
     LEFT JOIN grade g ON e.grade_id = g.id 
-    WHERE e.approve != 0 AND e.empStatus = $status;";
+    WHERE e.approve != 0 AND e.empStatus = $status
+    ORDER BY d.department_name ASC, g.grade ASC;";
 
 $result = $conn->query($query);
 
@@ -24,7 +25,6 @@ if ($result) {
 
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -62,6 +62,7 @@ $conn->close();
                         </a>
                     </h1>
                     <div class="flex justify-end gap-5">
+                        <input type="text" id="search" class="p-3 w-full rounded-md border border-gray-300" placeholder="Search for employees...">
                         <a href="users/empReg.php" class="btn btn-primary" <?php echo ($userrole_id != 1 && $userrole_id != 2 && $userrole_id != 3) ? 'hidden' : ''; ?>>
                             Add Employee
                         </a>
@@ -71,19 +72,19 @@ $conn->close();
                     </div>
                 </section>
 
-                <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg">
+                <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-lg text-center">
                     <thead>
                         <tr class="bg-gray-200">
-                            <th class="px-4 py-2 text-left">Profile Image</th>
-                            <th class="px-4 py-2 text-left">Employee No</th>
-                            <th class="px-4 py-2 text-left">Name</th>
-                            <th class="px-4 py-2 text-left">Grade</th>
-                            <th class="px-4 py-2 text-left">Designation</th>
-                            <th class="px-4 py-2 text-left">Department</th>
-                            <th class="px-4 py-2 text-left">Status</th>
+                            <th class="w-20">Profile</th>
+                            <th class="px-4">Employee No</th>
+                            <th class="text-left px-4">Name</th>
+                            <th class="px-4">Grade</th>
+                            <th class="text-left px-4">Designation</th>
+                            <th class="text-left px-4">Department</th>
+                            <th class="py-3 px-4">Status</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody id="employeeTable" class="bg-white divide-y divide-gray-200">
                         <?php if (empty($employees)): ?>
                             <tr>
                                 <td colspan="7" class="text-center py-4">No employees found.</td>
@@ -91,12 +92,12 @@ $conn->close();
                         <?php else: ?>
                             <?php foreach ($employees as $employee): ?>
                                 <tr class="hover:bg-gray-100">
-                                    <td class="px-4 py-2">
+                                    <td class="flex justify-center w-20 p-1">
                                         <?php 
                                             if (!empty($employee['image'])) {
                                                 $imagePath = 'uploads/' . basename($employee['image']);
                                                 if (file_exists($imagePath)) {
-                                                    echo '<img src="' . $imagePath . '" alt="Profile Image" class="w-14 h-14 object-cover rounded-full border border-gray-300" />';
+                                                    echo '<img src="' . $imagePath . '" alt="Profile Image" class="w-12 h-12 object-cover rounded-full border border-gray-300" />';
                                                 } else {
                                                     echo '<p class="text-red-500">Image not found.</p>';
                                                 }
@@ -105,16 +106,16 @@ $conn->close();
                                             }
                                         ?>
                                     </td>
-                                    <td class="px-4 py-2"><?php echo htmlspecialchars($employee['employeeNo']); ?></td>
-                                    <td class="px-4 py-2">
-                                        <a href="profile.php?employee_id=<?php echo $employee['id']; ?>" class="text-blue-600 hover:underline">
+                                    <td class="px-4"><?php echo htmlspecialchars($employee['employeeNo']); ?></td>
+                                    <td class="text-left w-60 px-4">
+                                        <a href="profile.php?employee_id=<?php echo $employee['id']; ?>" class="text-blue-600 hover:underline block w-60 text-ellipsis overflow-hidden whitespace-nowrap">
                                             <?php echo htmlspecialchars($employee['name']); ?>
                                         </a>
                                     </td>
-                                    <td class="px-4 py-2"><?php echo htmlspecialchars($employee['grade']); ?></td>
-                                    <td class="px-4 py-2"><?php echo htmlspecialchars($employee['designation']); ?></td>
-                                    <td class="px-4 py-2"><?php echo htmlspecialchars($employee['department_name']); ?></td>
-                                    <td class="px-4 py-2">
+                                    <td class="px-4"><?php echo htmlspecialchars($employee['grade']); ?></td>
+                                    <td class="text-left px-4"><?php echo htmlspecialchars($employee['designation']); ?></td>
+                                    <td class="text-left px-4"><p class="block w-72 text-ellipsis overflow-hidden whitespace-nowrap"><?php echo htmlspecialchars($employee['department_name']); ?></p></td>
+                                    <td class="px-4">
                                         <?php 
                                             echo ($employee['empStatus'] == 1) ? 'Active' : 
                                                  (($employee['empStatus'] == 2) ? 'Inactive' : 'Unknown');
@@ -128,5 +129,31 @@ $conn->close();
             </div>
         </main>
     </div>
+
+    <script>
+    // Simple search function
+    document.getElementById('search').addEventListener('input', function(e) {
+        const searchQuery = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('#employeeTable tr');
+        
+        rows.forEach(row => {
+            const columns = row.querySelectorAll('td');
+            let match = false;
+
+            columns.forEach(column => {
+                if (column.innerText.toLowerCase().includes(searchQuery)) {
+                    match = true;
+                }
+            });
+
+            if (match) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+
 </body>
 </html>

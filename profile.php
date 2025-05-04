@@ -208,7 +208,7 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
                     </button>
                     <div id="profileMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 text-gray-800 z-20">
                         <a href="/payroll/profile.php?employee_id=<?php echo $user['employee_id']; ?>" class="block px-4 py-2 hover:bg-gray-200">Profiles</a>
-                        <a href="/payroll/<?php echo $settings; ?>" class="block px-4 py-2 hover:bg-gray-200">Settings</a>
+                        <a href="/payroll/users/setting.php" class="block px-4 py-2 hover:bg-gray-200">Settings</a>
                         <a href="/payroll/logout.php" class="block px-4 py-2 text-red-600 hover:bg-gray-200">Logout</a>
                     </div>
                 </div>
@@ -265,7 +265,7 @@ $formattedJoiningDate = $joiningDate->format('d-M-Y');
                                             echo "Male";
                                         } elseif ($gender == 2) {
                                             echo "Female";
-                                        } elseif ($gender == 0) {
+                                        } elseif ($gender == 3) {
                                             echo "Other";
                                         } else {
                                             echo "Not specified";  // In case of an unexpected value

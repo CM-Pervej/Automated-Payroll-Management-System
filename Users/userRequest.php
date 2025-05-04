@@ -135,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="text-red-600 text-center"><?php echo implode('<br>', $errorMessages); ?></div>
                     <?php endif; ?>
 
-                    <form method="POST" enctype="multipart/form-data" class="mt-6">
+                    <form method="POST" enctype="multipart/form-data" class="mt-6" autocomplete="off">
                         <section class="flex justify-between gap-20">
                             <table class="w-full">
                                 <tbody>
@@ -276,7 +276,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </section>
 
                         <!-- Terms and Conditions -->
-                        <button type="submit" class="mt-6 w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700">Add Employee</button>
+                        <button type="submit" class="mt-6 w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700"> Submit Request </button>
                         <div class="flex items-center mt-4">
                             <input type="checkbox" id="terms" class="checkbox checkbox-primary" required>
                             <label for="terms" class="text-gray-600 ml-2">I agree to the <span class="text-blue-500">Terms & Conditions</span></label>

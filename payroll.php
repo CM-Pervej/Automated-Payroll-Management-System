@@ -1,6 +1,10 @@
 <?php
 include 'view.php'; 
 include 'db_conn.php';
+
+// Set the time zone to Bangladesh
+date_default_timezone_set('Asia/Dhaka');
+
 $employeesData = [];
 
 // Fetch all allowances from allowanceList
@@ -277,91 +281,70 @@ $conn->close();
                 <section class="container mx-auto px-4 mt-24">
                     <div class="overflow-auto w-fit mx-auto pr-72 mr-72">
                         <!-- <table class="table w-full border-collapse border border-gray-200 rounded-lg shadow-md bg-white mb-10"> -->
-                        <table class="table w-full border-collapse border border-gray-200 rounded-lg shadow-md bg-white mb-10" role="table" aria-label="Employee Payroll Information">
+                        <table class="table w-full border-collapse border border-gray-200 rounded-lg shadow-md bg-white mb-10 text-center" role="table" aria-label="Employee Payroll Information">
                             <thead class="bg-gray-200 text-sm">
                                 <tr>
-                                    <th id="th1" scope="col" class="p-3 text-left border border-gray-300">Image</th>
-                                    <th id="th2" scope="col" class="p-3 text-left border border-gray-300">Employee No</th>
-                                    <th id="th3" scope="col" class="p-3 text-left border border-gray-300">Name</th>
-                                    <th id="th3" scope="col" class="p-3 text-left border border-gray-300">Gender</th>
+                                    <th id="th1" scope="col" class="p-3 border border-gray-300">Employee No</th>
+                                    <th id="th2" scope="col" class="p-3 text-left border border-gray-300">Name</th>
+                                    <th id="th3" scope="col" class="p-3 border border-gray-300">Gender</th>
                                     <th id="th4" scope="col" class="p-3 text-left border border-gray-300">Primary Designation</th>
                                     <th id="th5" scope="col" class="p-3 text-left border border-gray-300">Department</th>
-                                    <th id="th6" scope="col" class="p-3 text-left border border-gray-300">Grade</th>
-                                    <th id="th7" scope="col" class="p-3 text-left border border-gray-300">Scale</th>
-                                    <th id="th8" scope="col" class="p-3 text-left border border-gray-300">Increment</th>
-                                    <th id="th9" scope="col" class="p-3 text-left border border-gray-300">Basic Salary</th>
+                                    <th id="th6" scope="col" class="p-3 border border-gray-300">Grade</th>
+                                    <th id="th7" scope="col" class="p-3 border border-gray-300">Scale</th>
+                                    <th id="th8" scope="col" class="p-3 border border-gray-300">Increment</th>
+                                    <th id="th9" scope="col" class="p-3 border border-gray-300">Basic Salary</th>
 
                                     <?php foreach ($allowanceList as $index => $allowance) : ?>
-                                        <th id="th-allowance-<?php echo $index; ?>" class="p-3 text-left border border-gray-300">
+                                        <th id="th-allowance-<?php echo $index; ?>" class="p-3 border border-gray-300">
                                             <?php echo $allowance['allwName']; ?>
                                         </th>
                                     <?php endforeach; ?>
 
-                                    <th id="th-total-allowance" class="p-3 text-left border border-gray-300">Total Allowance</th>
+                                    <th id="th-total-allowance" class="p-3 border border-gray-300">Total Allowance</th>
 
                                     <?php foreach ($deductionList as $index => $deduction) : ?>
-                                        <th id="th-deduction-<?php echo $index; ?>" class="p-3 text-left border border-gray-300">
+                                        <th id="th-deduction-<?php echo $index; ?>" class="p-3 border border-gray-300">
                                             <?php echo $deduction['dedName']; ?>
                                         </th>
                                     <?php endforeach; ?>
 
-                                    <th id="th-total-deduction" scope="col" class="p-3 text-left border border-gray-300">Total Deduction</th>
-                                    <th id="th-charge-allw" scope="col" class="p-3 text-left border border-gray-300">Charge Allw</th>
-                                    <th id="th-telephone-allw" scope="col" class="p-3 text-left border border-gray-300">Telephone Allw</th>
-                                    <th id="th-gross-pay" scope="col" class="p-3 text-left border border-gray-300">Gross Pay</th>
-                                    <th id="th-net-pay" scope="col" class="p-3 text-left border border-gray-300">Net Pay</th>
+                                    <th id="th-total-deduction" scope="col" class="p-3 border border-gray-300">Total Deduction</th>
+                                    <th id="th-charge-allw" scope="col" class="p-3 border border-gray-300">Charge Allw</th>
+                                    <th id="th-telephone-allw" scope="col" class="p-3 border border-gray-300">Telephone Allw</th>
+                                    <th id="th-gross-pay" scope="col" class="p-3 border border-gray-300">Gross Pay</th>
+                                    <th id="th-net-pay" scope="col" class="p-3 border border-gray-300">Net Pay</th>
                                     <th id="th-additional-designations" scope="col" class="p-3 text-left border border-gray-300">Additional Designations</th>
                                 </tr>
                             </thead>
                             <tbody id="employeeTable">
                                 <?php foreach ($employeesData as $data) : ?>
                                     <tr class="border-b hover:bg-gray-100">
-                                        <td headers="th1" class="w-max">
-                                            <p class="w-max">
-                                                <?php 
-                                                    if (!empty($data['employee']['image'])) {
-                                                        $imagePath = 'uploads/' . basename($data['employee']['image']);
-                                                        
-                                                        // Check if the file exists before displaying
-                                                        if (file_exists($imagePath)): 
-                                                ?>
-                                                <img src="<?php echo $imagePath; ?>" alt="Profile Image" class="size-14 object-cover rounded-full border border-gray-300" />
-                                                <?php else: ?>
-                                                    <p class="text-red-500">Image file does not exist at: <?php echo htmlspecialchars($imagePath); ?></p>
-                                                <?php 
-                                                        endif; 
-                                                    } else {
-                                                ?>
-                                                    <p>No image available for this employee.</p>
-                                                <?php } ?>
-                                            </p>
-                                        </td>
-                                        <td headers="th2" class="p-3 text-left border"><?php echo $data['employee']['employeeNo']; ?></td>
-                                        <td headers="th3" class="p-3 text-left border">
-                                            <a href="profile.php?employee_id=<?php echo $data['employee']['employee_id']; ?>" class="text-blue-600 font-semibold whitespace-nowrap hover:underline">
+                                        <td headers="th1" class="border"><?php echo $data['employee']['employeeNo']; ?></td>
+                                        <td headers="th2" class="text-left border">
+                                            <a href="profile.php?employee_id=<?php echo $data['employee']['employee_id']; ?>" class="text-blue-600 font-semibold hover:underline block w-48 text-ellipsis overflow-hidden whitespace-nowrap">
                                                 <?php echo $data['employee']['name']; ?>
                                             </a>
                                         </td>
-                                        <td headers="th6" class="p-3 text-left border">
+                                        <td headers="th3" class="border">
                                             <?php 
                                                 $gender = $data['employee']['gender'];
                                                 if ($gender == 1) {
                                                     echo "Male";
                                                 } elseif ($gender == 2) {
                                                     echo "Female";
-                                                } elseif ($gender == 0) {
+                                                } elseif ($gender == 3) {
                                                     echo "Other";
                                                 } else {
                                                     echo "Not specified"; 
                                                 }
                                             ?>
                                         </td>
-                                        <td headers="th4" class="p-3 text-left border whitespace-nowrap"><?php echo $data['employee']['primary_designation']; ?></td>
-                                        <td headers="th5" class="p-3 text-left border whitespace-nowrap"><?php echo $data['employee']['department_name']; ?></td>
-                                        <td headers="th6" class="p-3 text-left border"><?php echo $data['employee']['grade']; ?></td>
-                                        <td headers="th7" class="p-3 text-left border"><?php echo $data['employee']['scale']; ?>.00</td>
-                                        <td headers="th8" class="p-3 text-left border"><?php echo $data['employee']['no_of_increment']; ?></td>
-                                        <td headers="th9" class="p-3 text-left border"><?php echo $data['employee']['basic']; ?></td>
+                                        <td headers="th4" class="text-left border whitespace-nowrap"><?php echo $data['employee']['primary_designation']; ?></td>
+                                        <td headers="th5" class="text-left border"><p class="block w-56 text-ellipsis overflow-hidden whitespace-nowrap"><?php echo $data['employee']['department_name']; ?></p></td>
+                                        <td headers="th6" class="border"><?php echo $data['employee']['grade']; ?></td>
+                                        <td headers="th7" class="text-left border"><?php echo number_format($data['employee']['scale'], 2); ?></td>
+                                        <td headers="th8" class="border"><?php echo $data['employee']['no_of_increment']; ?></td>
+                                        <td headers="th9" class="border"><?php echo number_format($data['employee']['basic'], 2); ?></td>
 
                                         <?php foreach ($allowanceList as $index => $allowance): ?>
                                             <?php 
@@ -374,12 +357,12 @@ $conn->close();
                                                 }
                                             }
                                             ?>
-                                            <td headers="th-allowance-<?php echo $index; ?>" class="p-3 text-left border">
+                                            <td headers="th-allowance-<?php echo $index; ?>" class="border">
                                                 <?php echo $allowanceValue !== null ? $allowanceValue : '0.00'; // Use '0' or 'N/A' for missing values ?>
                                             </td>
                                         <?php endforeach; ?>
 
-                                        <td headers="th-total-allowance" class="p-3 text-left border"><?php echo $data['totalAllowance']; ?></td>
+                                        <td headers="th-total-allowance" class="border"><?php echo number_format($data['totalAllowance'], 2); ?></td>
 
                                         <?php foreach ($deductionList as $index => $deduction): ?>
                                             <?php 
@@ -392,17 +375,17 @@ $conn->close();
                                                 }
                                             }
                                             ?>
-                                            <td headers="th-deduction-<?php echo $index; ?>" class="p-3 text-left border">
+                                            <td headers="th-deduction-<?php echo $index; ?>" class="border">
                                                 <?php echo $deductionValue !== null ? $deductionValue : '0.00'; // Use '0' or 'N/A' for missing values ?>
                                             </td>
                                         <?php endforeach; ?>
 
-                                        <td headers="th-total-deduction" class="p-3 text-left border"><?php echo $data['totalDeduction']; ?></td>
-                                        <td headers="th-charge-allw" class="p-3 text-left border"><?php echo $data['empAddSalary']['chargeAllw']; ?></td>
-                                        <td headers="th-telephone-allw" class="p-3 text-left border"><?php echo $data['empAddSalary']['telephoneAllwance']; ?></td>
-                                        <td headers="th-gross-pay" class="p-3 text-left border"><?php echo $data['grossPay']; ?></td>
-                                        <td headers="th-net-pay" class="p-3 text-left border"><?php echo $data['netPay']; ?></td>
-                                        <td headers="th-additional-designations" class="p-3 text-left border whitespace-nowrap">
+                                        <td headers="th-total-deduction" class="border"><?php echo number_format($data['totalDeduction'], 2); ?></td>
+                                        <td headers="th-charge-allw" class="border"><?php echo number_format($data['empAddSalary']['chargeAllw'], 2); ?></td>
+                                        <td headers="th-telephone-allw" class="border"><?php echo number_format($data['empAddSalary']['telephoneAllwance'], 2); ?></td>
+                                        <td headers="th-gross-pay" class="border"><?php echo number_format($data['grossPay'], 2); ?></td>
+                                        <td headers="th-net-pay" class="border"><?php echo number_format($data['netPay'], 2); ?></td>
+                                        <td headers="th-additional-designations" class="text-left border whitespace-nowrap">
                                             <?php echo !empty($data['additionalDesignations']) ? implode(", ", $data['additionalDesignations']) : 'N/A'; ?>
                                         </td>
                                     </tr>

@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <main class="flex-grow p-8 mt-16 bg-white shadow-lg overflow-auto">
             <div class="container mx-auto p-8 bg-white shadow-lg rounded-lg mt-8">
                 <?php if ($employee): ?>
-                    <form method="POST" enctype="multipart/form-data">
+                    <form method="POST" enctype="multipart/form-data" autocomplete="off">
                         <!-- Employee Basic Information -->
                         <section class="grid grid-cols-1 lg:grid-cols-2">
                             <article class="space-y-6 border-t border-r border-black p-5">

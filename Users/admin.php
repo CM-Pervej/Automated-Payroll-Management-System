@@ -129,7 +129,11 @@ $conn->close();
                             <?php foreach ($employeesWithoutUser as $employee): ?>
                                 <tr class="hover:bg-gray-100">
                                     <td class="px-4 py-2"><?php echo htmlspecialchars($employee['employeeNo']); ?></td>
-                                    <td class="px-4 py-2"><?php echo htmlspecialchars($employee['name']); ?></td>
+                                    <td class="px-4 py-2">
+                                        <a href="../profile.php?employee_id=<?php echo $employee['id']; ?>" class="text-blue-600 hover:underline">
+                                            <?php echo $employee['name']; ?>
+                                        </a>
+                                    </td>
                                     <td class="px-4 py-2"><?php echo htmlspecialchars($employee['grade']); ?></td>
                                     <td class="px-4 py-2"><?php echo htmlspecialchars($employee['designation']); ?></td>
                                     <td class="px-4 py-2"><?php echo htmlspecialchars($employee['department_name']); ?></td>
@@ -181,7 +185,11 @@ $conn->close();
                             <?php foreach ($employeesWithUser as $employee) : ?>
                                 <tr class="hover:bg-gray-100">
                                     <td class="px-4 py-2"><?= htmlspecialchars($employee['employeeNo']) ?></td>
-                                    <td class="px-4 py-2"><?= htmlspecialchars($employee['name']) ?></td>
+                                    <td class="px-4 py-2">
+                                        <a href="../profile.php?employee_id=<?php echo $employee['id']; ?>" class="text-blue-600 hover:underline">
+                                            <?php echo $employee['name']; ?>
+                                        </a>
+                                    </td>
                                     <td class="px-4 py-2"><?= htmlspecialchars($employee['grade']) ?></td>
                                     <td class="px-4 py-2"><?= htmlspecialchars($employee['designation']) ?></td>
                                     <td class="px-4 py-2"><?= htmlspecialchars($employee['department_name']) ?></td>

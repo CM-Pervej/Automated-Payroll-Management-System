@@ -77,7 +77,7 @@ $conn->close();
         <!-- Login Section -->
         <section id="loginForm" class="absolute right-0 m-5 rounded-lg shadow-lg flex items-center justify-center bg-opacity-70 hidden bg-black">
             <div class="bg-blue-100 bg-opacity-80 rounded-lg shadow-lg text-center max-w-3xl">
-                <form action="index.php" method="POST" class="space-y-4">
+                <form action="index.php" method="POST" class="space-y-4" autocomplete="off"">
                     <div class="px-12 pb-12 bg-white mx-auto rounded-lg w-100">
                         <div class="flex justify-end pt-2 -mr-9">
                             <i id="cancelBtn" class="fa-solid fa-xmark w-max hover:text-green-500"></i>

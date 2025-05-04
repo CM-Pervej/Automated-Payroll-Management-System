@@ -65,7 +65,7 @@
     }
 
     // Fetch active users (status = 1)
-    $activeQuery = "SELECT u.id, u.name, u.email, u.userrole_id, u.employeeNo, u.status, r.role 
+    $activeQuery = "SELECT u.id, u.name, u.email, u.userrole_id, u.employeeNo, u.employee_id, u.status, r.role 
                     FROM user u
                     JOIN userRole r ON u.userrole_id = r.id
                     WHERE u.status = 1
@@ -80,7 +80,7 @@
     }
 
     // Fetch inactive users (status = 0)
-    $inactiveQuery = "SELECT u.id, u.name, u.email, u.userrole_id, u.employeeNo, u.status, r.role 
+    $inactiveQuery = "SELECT u.id, u.name, u.email, u.userrole_id, u.employeeNo, u.employee_id, u.status, r.role 
                       FROM user u
                       JOIN userRole r ON u.userrole_id = r.id
                       WHERE u.status = 0
@@ -149,6 +149,7 @@
                     <table class="table-auto w-full border-collapse mb-6">
                         <thead>
                             <tr class="bg-green-100">
+                                <th class="px-4 py-2 text-left">ID</th>
                                 <th class="px-4 py-2 text-left">Name</th>
                                 <th class="px-4 py-2 text-left">Email</th>
                                 <th class="px-4 py-2 text-left">Role</th>
@@ -159,7 +160,12 @@
                         <tbody>
                             <?php foreach ($activeUsers as $user): ?>
                             <tr class="bg-green-50">
-                                <td class="border px-4 py-2"><?php echo $user['name']; ?></td>
+                                <td class="border px-4 py-2"><?php echo $user['employeeNo']; ?></td>
+                                <td class="border px-4 py-2">
+                                    <a href="../profile.php?employee_id=<?php echo $user['employee_id']; ?>" class="text-blue-600 hover:underline">
+                                        <?php echo $user['name']; ?>
+                                    </a>
+                                </td>
                                 <td class="border px-4 py-2"><?php echo $user['email']; ?></td>
                                 <td class="border px-4 py-2"><?php echo $user['role']; ?></td>
                                 <td class="border px-4 py-2"><?php echo ($user['status'] == 1) ? 'Active' : 'Inactive'; ?></td>
@@ -184,6 +190,7 @@
                     <table class="table-auto w-full border-collapse">
                         <thead>
                             <tr class="bg-red-100">
+                                <th class="px-4 py-2 text-left">ID</th>
                                 <th class="px-4 py-2 text-left">Name</th>
                                 <th class="px-4 py-2 text-left">Email</th>
                                 <th class="px-4 py-2 text-left">Role</th>
@@ -193,18 +200,23 @@
                         </thead>
                         <tbody>
                             <?php foreach ($inactiveUsers as $user): ?>
-                            <tr class="bg-red-50">
-                                <td class="border px-4 py-2"><?php echo $user['name']; ?></td>
-                                <td class="border px-4 py-2"><?php echo $user['email']; ?></td>
-                                <td class="border px-4 py-2"><?php echo $user['role']; ?></td>
-                                <td class="border px-4 py-2"><?php echo ($user['status'] == 1) ? 'Active' : 'Inactive'; ?></td>
-                                <td class="border px-4 py-2 text-center">
-                                    <button class="bg-blue-500 text-white px-4 py-1 rounded" 
-                                            onclick="openEditModal(<?php echo htmlspecialchars(json_encode($user)); ?>)">
-                                        Edit
-                                    </button>
-                                </td>
-                            </tr>
+                                <tr class="bg-red-50">
+                                    <td class="border px-4 py-2"><?php echo $user['employeeNo']; ?></td>
+                                    <td class="border px-4 py-2">
+                                        <a href="../profile.php?employee_id=<?php echo $user['employee_id']; ?>" class="text-blue-600 hover:underline">
+                                            <?php echo $user['name']; ?>
+                                        </a>
+                                    </td>
+                                    <td class="border px-4 py-2"><?php echo $user['email']; ?></td>
+                                    <td class="border px-4 py-2"><?php echo $user['role']; ?></td>
+                                    <td class="border px-4 py-2"><?php echo ($user['status'] == 1) ? 'Active' : 'Inactive'; ?></td>
+                                    <td class="border px-4 py-2 text-center">
+                                        <button class="bg-blue-500 text-white px-4 py-1 rounded" 
+                                                onclick="openEditModal(<?php echo htmlspecialchars(json_encode($user)); ?>)">
+                                            Edit
+                                        </button>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>

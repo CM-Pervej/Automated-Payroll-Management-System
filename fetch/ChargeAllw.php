@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <tr class="bg-white">
                                     <td class="border px-4 py-2"><?php echo $id; ?></td>
                                     <td>
-                                        <a href="add_group.php?AdditionalDesignation_id=<?= htmlspecialchars($id); ?>" class="text-blue-600 w-full block py-4 transform transition-all duration-150 hover:scale-125">
+                                        <a href="group.php?AdditionalDesignation_id=<?= htmlspecialchars($id); ?>" class="text-blue-600 w-full block py-4 transform transition-all duration-150 hover:scale-125">
                                             <?= htmlspecialchars($data['designation']); ?>
                                         </a>
                                     </td>

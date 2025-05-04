@@ -139,16 +139,15 @@ $conn->close();
                 <p>Jashore University of Science and Technology <br> Jashore - 7408 <br> Salary Bill</p>
             </div>
         </section>
+
         <section class="mt-6">
             <hr class="border border-black ml-8">
-            <div class="text-lg font-bold py-1 relative">
-                <p class="absolute ml-10">Current Month: <?php echo date('F, Y', strtotime("{$passed_year}-{$passed_month}-01")); ?></p>
-                <p class="text-center text-2xl">Grade: <?php echo htmlspecialchars($gradee); ?></p>
-            </div>
+            <p class="ml-10 my-2 text-lg font-bold">Current Month: <?php echo date('F, Y', strtotime("{$passed_year}-{$passed_month}-01")); ?></p>
             <hr class="border border-black">
         </section>
 
         <section class="mt-5">
+            <p class="text-xl">Salary Details of grade: <span class="font-bold"><?php echo htmlspecialchars($gradee); ?></span> </p>
             <article class="mt-5">
                 <table class="w-full border-collapse border border-black">
                     <thead>

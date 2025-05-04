@@ -254,6 +254,29 @@ $conn->close();
                 <p>In Words: <span class="net-pay-words font-bold" data-total="<?php echo number_format($sum, 2); ?>"></span></p>
             </div>
         </section>
+        <section class="flex justify-between items-end gap-5 mt-10">
+            <aside class="flex-1 flex flex-col gap-4">
+                <p class="flex justify-end w-full"> <span class="border border-black py-6 px-3 w-max tracking-widest">STAMP</span></p>
+                <p class="text-lg text-center border-t border-black border-dashed whitespace-nowrap">Incumbent's Signature</p>
+            </aside>
+            <aside class="flex-1">
+                <p class="text-lg text-center border-t border-black border-dashed whitespace-nowrap">Prepared By</p>
+            </aside>
+            <aside class="flex-1 flex flex-col gap-10">
+                <p class="text-center">Remarks</p>
+                <p class="text-lg text-center border-t border-black border-dashed whitespace-nowrap">Assistant Director</p>
+            </aside>
+            <aside class="flex-1">
+                <p class="text-lg text-center border-t border-black border-dashed whitespace-nowrap">Deputy Director</p>
+            </aside>
+            <aside class="flex-1">
+                <p class="text-lg text-center border-t border-black border-dashed whitespace-nowrap">Director</p>
+            </aside>
+        </section>
+        <section class="mt-10 text-lg border-t border-black py-5">
+            <p>Web developed by: department of <span class="font-bold">Computer Science and Engineering, JUST</span> </p>
+            <p>NB. If there is any error in your bill, immediately inform it to the Accounts Office of JUST</p>
+        </section>
     </section>
     <?php endforeach; ?>
 </body>
