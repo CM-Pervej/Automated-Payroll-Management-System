@@ -136,7 +136,7 @@ With the Web-based Automated Payroll Management System, you can:
    - **Database design**:
    ![Database Design](./uploads/database.png)
 
-   **Flow Chart**:
+   - **Flow Chart**:
    ![Flowchart](./uploads/flowchart.png)
 
 ---
