@@ -1,4 +1,4 @@
-# Web-based Automated Payroll Management System [CMPayroll Project](http://cmpayroll.infinityfreeapp.com/).
+# Web-based Automated Payroll Management System
 
 ## Introduction
 
